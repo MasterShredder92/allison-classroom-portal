@@ -2,7 +2,7 @@ const quickLinks = [
   { icon: '📚', title: 'Google Classroom', note: 'Daily classwork', url: 'https://classroom.google.com', color: 'from-accent-sky-blue/45 to-white', border: 'border-accent-sky-blue' },
   { icon: '📊', title: 'Gradebook', note: 'Check progress', url: 'https://classroom.google.com', color: 'from-accent-yellow/50 to-white', border: 'border-accent-yellow' },
   { icon: '🎮', title: 'ClassDojo', note: 'Class updates', url: 'https://www.classdojo.com', color: 'from-accent-purple/35 to-white', border: 'border-accent-purple' },
-  { icon: '🏫', title: 'School Site', note: 'Wilmot resources', url: 'https://www.wilmot54-7.com', color: 'from-accent-lavender/45 to-white', border: 'border-accent-lavender' },
+  { icon: '🏫', title: 'School Site', note: 'Wilmot resources', url: 'https://www.wilmot.k12.sd.us/', color: 'from-accent-lavender/45 to-white', border: 'border-accent-lavender' },
 ]
 
 export default function QuickLinkBar() {
