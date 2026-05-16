@@ -2,35 +2,39 @@
 
 import { useEffect, useState } from 'react'
 
-interface PageContent {
-  slug: string
-  title: string
-  body_markdown: string
+async function getApiError(response: Response, fallback: string) {
+  try {
+    const payload = await response.json()
+    return payload?.error || payload?.message || fallback
+  } catch {
+    return fallback
+  }
 }
 
 const PAGES = ['about', 'contact']
 
 export default function PagesPage() {
   const [currentPage, setCurrentPage] = useState('about')
-  const [content, setContent] = useState<PageContent | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     title: '',
     body_markdown: '',
   })
 
   useEffect(() => {
-    setLoading(true)
     fetch(`/api/page-content/${currentPage}`).then(async res => {
-      if (res.ok) {
-        const data = await res.json()
-        setContent(data.data)
-        setFormData({
-          title: data.data.title,
-          body_markdown: data.data.body_markdown,
-        })
+      if (!res.ok) {
+        setError(await getApiError(res, 'Could not load this page.'))
+        setLoading(false)
+        return
       }
+      const data = await res.json()
+      setFormData({
+        title: data.data.title,
+        body_markdown: data.data.body_markdown,
+      })
       setLoading(false)
     })
   }, [currentPage])
@@ -38,6 +42,7 @@ export default function PagesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
+    setError(null)
     try {
       const response = await fetch(`/api/page-content/${currentPage}`, {
         method: 'PUT',
@@ -47,15 +52,18 @@ export default function PagesPage() {
         },
         body: JSON.stringify(formData),
       })
-      if (response.ok) {
-        const res = await fetch(`/api/page-content/${currentPage}`)
-        if (res.ok) {
-          const data = await res.json()
-          setContent(data.data)
-        }
+      if (!response.ok) {
+        setError(await getApiError(response, 'Page could not be saved. Check the fields and try again.'))
+        return
+      }
+
+      const res = await fetch(`/api/page-content/${currentPage}`)
+      if (res.ok) {
+        await res.json()
       }
     } catch (error) {
       console.error('Error saving page:', error)
+      setError('Page could not be saved. Check your connection and try again.')
     } finally {
       setSaving(false)
     }
@@ -69,7 +77,10 @@ export default function PagesPage() {
         {PAGES.map(page => (
           <button
             key={page}
-            onClick={() => setCurrentPage(page)}
+            onClick={() => {
+              setCurrentPage(page)
+              setError(null)
+            }}
             className={`px-4 py-2 rounded font-semibold transition-colors ${
               currentPage === page
                 ? 'bg-accent-cyan text-white'
@@ -80,6 +91,12 @@ export default function PagesPage() {
           </button>
         ))}
       </div>
+
+      {error && (
+        <div role="alert" className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800">
+          {error}
+        </div>
+      )}
 
       {loading ? (
         <div className="space-y-4">

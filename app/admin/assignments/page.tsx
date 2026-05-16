@@ -18,10 +18,21 @@ interface Class {
   display_name: string
 }
 
+async function getApiError(response: Response, fallback: string) {
+  try {
+    const payload = await response.json()
+    return payload?.error || payload?.message || fallback
+  } catch {
+    return fallback
+  }
+}
+
 export default function AssignmentsPage() {
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [classes, setClasses] = useState<Class[]>([])
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
@@ -38,7 +49,7 @@ export default function AssignmentsPage() {
       .then(async ([aRes, cRes]) => {
         if (aRes.ok) {
           const data = await aRes.json()
-          setAssignments(data.data.sort((a: any, b: any) => new Date(b.due_date).getTime() - new Date(a.due_date).getTime()))
+          setAssignments(data.data.sort((a: Assignment, b: Assignment) => new Date(b.due_date || '').getTime() - new Date(a.due_date || '').getTime()))
         }
         if (cRes.ok) {
           const data = await cRes.json()
@@ -48,10 +59,22 @@ export default function AssignmentsPage() {
       .finally(() => setLoading(false))
   }, [])
 
+  const refreshAssignments = async () => {
+    const res = await fetch('/api/assignments')
+    if (!res.ok) {
+      setError(await getApiError(res, 'Could not load assignments.'))
+      return
+    }
+    const data = await res.json()
+    setAssignments(data.data)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     const method = editingId ? 'PUT' : 'POST'
+    setSaving(true)
+    setError(null)
     try {
       const response = await fetch('/api/assignments', {
         method,
@@ -67,23 +90,26 @@ export default function AssignmentsPage() {
         }),
       })
 
-      if (response.ok) {
-        setFormData({ class_id: '', title: '', description: '', due_date: '', resource_url: '', file_url: '' })
-        setEditingId(null)
-        setShowForm(false)
-        const res = await fetch('/api/assignments')
-        if (res.ok) {
-          const data = await res.json()
-          setAssignments(data.data)
-        }
+      if (!response.ok) {
+        setError(await getApiError(response, 'Assignment could not be saved. Check the fields and try again.'))
+        return
       }
+
+      setFormData({ class_id: '', title: '', description: '', due_date: '', resource_url: '', file_url: '' })
+      setEditingId(null)
+      setShowForm(false)
+      await refreshAssignments()
     } catch (error) {
       console.error('Error saving assignment:', error)
+      setError('Assignment could not be saved. Check your connection and try again.')
+    } finally {
+      setSaving(false)
     }
   }
 
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this assignment?')) return
+    setError(null)
     try {
       const response = await fetch('/api/assignments', {
         method: 'DELETE',
@@ -93,16 +119,30 @@ export default function AssignmentsPage() {
         },
         body: JSON.stringify({ id }),
       })
-      if (response.ok) {
-        const res = await fetch('/api/assignments')
-        if (res.ok) {
-          const data = await res.json()
-          setAssignments(data.data)
-        }
+      if (!response.ok) {
+        setError(await getApiError(response, 'Assignment could not be deleted.'))
+        return
       }
+
+      await refreshAssignments()
     } catch (error) {
       console.error('Error deleting assignment:', error)
+      setError('Assignment could not be deleted. Check your connection and try again.')
     }
+  }
+
+  const handleEdit = (assignment: Assignment) => {
+    setError(null)
+    setFormData({
+      class_id: assignment.class_id,
+      title: assignment.title,
+      description: assignment.description || '',
+      due_date: assignment.due_date || '',
+      resource_url: assignment.resource_url || '',
+      file_url: assignment.file_url || '',
+    })
+    setEditingId(assignment.id)
+    setShowForm(true)
   }
 
   return (
@@ -113,6 +153,7 @@ export default function AssignmentsPage() {
           onClick={() => {
             setShowForm(!showForm)
             setEditingId(null)
+            setError(null)
             setFormData({ class_id: '', title: '', description: '', due_date: '', resource_url: '', file_url: '' })
           }}
           className="bg-accent-cyan text-white px-4 py-2 rounded font-semibold hover:opacity-90"
@@ -120,6 +161,12 @@ export default function AssignmentsPage() {
           {showForm ? 'Cancel' : 'New Assignment'}
         </button>
       </div>
+
+      {error && (
+        <div role="alert" className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800">
+          {error}
+        </div>
+      )}
 
       {showForm && (
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg border border-neutral-medium-gray mb-8 space-y-4">
@@ -183,8 +230,8 @@ export default function AssignmentsPage() {
             </div>
           </div>
 
-          <button type="submit" className="bg-accent-cyan text-white px-6 py-2 rounded font-semibold hover:opacity-90">
-            {editingId ? 'Update' : 'Create'}
+          <button type="submit" className="bg-accent-cyan text-white px-6 py-2 rounded font-semibold hover:opacity-90 disabled:opacity-60" disabled={saving}>
+            {saving ? 'Saving...' : editingId ? 'Update' : 'Create'}
           </button>
         </form>
       )}
@@ -204,7 +251,10 @@ export default function AssignmentsPage() {
                 <p className="text-sm text-neutral-dark-gray">Due: {new Date(assignment.due_date).toLocaleDateString()}</p>
               </div>
               <div className="flex gap-2 ml-4">
-                <button onClick={() => handleDelete(assignment.id)} className="text-accent-pink text-sm font-semibold">
+                <button onClick={() => handleEdit(assignment)} className="text-accent-cyan text-sm font-semibold" disabled={saving}>
+                  Edit
+                </button>
+                <button onClick={() => handleDelete(assignment.id)} className="text-accent-pink text-sm font-semibold" disabled={saving}>
                   Delete
                 </button>
               </div>

@@ -12,9 +12,20 @@ interface Announcement {
   link_url?: string
 }
 
+async function getApiError(response: Response, fallback: string) {
+  try {
+    const payload = await response.json()
+    return payload?.error || payload?.message || fallback
+  } catch {
+    return fallback
+  }
+}
+
 export default function AnnouncementsPage() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([])
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
@@ -29,12 +40,12 @@ export default function AnnouncementsPage() {
     fetchAnnouncements()
   }, [])
 
-  const fetchAnnouncements = async () => {
+  async function fetchAnnouncements() {
     try {
       const res = await fetch('/api/announcements')
       if (res.ok) {
         const data = await res.json()
-        setAnnouncements(data.data.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()))
+        setAnnouncements(data.data.sort((a: Announcement, b: Announcement) => new Date(b.date).getTime() - new Date(a.date).getTime()))
       }
     } catch (error) {
       console.error('Error fetching announcements:', error)
@@ -47,10 +58,11 @@ export default function AnnouncementsPage() {
     e.preventDefault()
 
     const method = editingId ? 'PUT' : 'POST'
-    const endpoint = editingId ? `/api/announcements` : '/api/announcements'
+    setSaving(true)
+    setError(null)
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch('/api/announcements', {
         method,
         headers: {
           'Content-Type': 'application/json',
@@ -59,18 +71,24 @@ export default function AnnouncementsPage() {
         body: JSON.stringify({
           ...(editingId && { id: editingId }),
           ...formData,
-          date: new Date().toISOString(),
+          date: new Date().toISOString().split('T')[0],
         }),
       })
 
-      if (response.ok) {
-        setFormData({ title: '', body: '', link_url: '', attachment_url: '', pinned: false })
-        setEditingId(null)
-        setShowForm(false)
-        fetchAnnouncements()
+      if (!response.ok) {
+        setError(await getApiError(response, 'Announcement could not be saved. Check the fields and try again.'))
+        return
       }
+
+      setFormData({ title: '', body: '', link_url: '', attachment_url: '', pinned: false })
+      setEditingId(null)
+      setShowForm(false)
+      fetchAnnouncements()
     } catch (error) {
       console.error('Error saving announcement:', error)
+      setError('Announcement could not be saved. Check your connection and try again.')
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -87,11 +105,15 @@ export default function AnnouncementsPage() {
         body: JSON.stringify({ id }),
       })
 
-      if (response.ok) {
-        fetchAnnouncements()
+      if (!response.ok) {
+        setError(await getApiError(response, 'Announcement could not be deleted.'))
+        return
       }
+
+      fetchAnnouncements()
     } catch (error) {
       console.error('Error deleting announcement:', error)
+      setError('Announcement could not be deleted. Check your connection and try again.')
     }
   }
 
@@ -122,6 +144,12 @@ export default function AnnouncementsPage() {
           {showForm ? 'Cancel' : 'New Announcement'}
         </button>
       </div>
+
+      {error && (
+        <div role="alert" className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800">
+          {error}
+        </div>
+      )}
 
       {showForm && (
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg border border-neutral-medium-gray mb-8 space-y-4">
@@ -188,9 +216,10 @@ export default function AnnouncementsPage() {
           <div className="flex gap-2">
             <button
               type="submit"
-              className="bg-accent-cyan text-white px-6 py-2 rounded font-semibold hover:opacity-90"
+              className="bg-accent-cyan text-white px-6 py-2 rounded font-semibold hover:opacity-90 disabled:opacity-60"
+              disabled={saving}
             >
-              {editingId ? 'Update' : 'Publish'}
+              {saving ? 'Saving...' : editingId ? 'Update' : 'Publish'}
             </button>
             {editingId && (
               <button

@@ -18,7 +18,6 @@ export default function AdminLayout({
 
   useEffect(() => {
     if (isLoginPage) {
-      setLoading(false)
       return
     }
 
@@ -105,7 +104,7 @@ export default function AdminLayout({
         </div>
 
         {menuOpen && (
-          <nav className="px-6 md:px-4 pb-6 md:pb-4 space-y-2 md:block hidden">
+          <nav className="block md:hidden px-6 pb-6 space-y-2">
             <Link
               href="/admin"
               className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"

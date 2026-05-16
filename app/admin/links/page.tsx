@@ -10,18 +10,40 @@ interface Link {
   description?: string
 }
 
+async function getApiError(response: Response, fallback: string) {
+  try {
+    const payload = await response.json()
+    return payload?.error || payload?.message || fallback
+  } catch {
+    return fallback
+  }
+}
+
 const categories = ['gradebook', 'school', 'classroom_tools', 'reading', 'curriculum', 'other']
 
 export default function LinksPage() {
   const [links, setLinks] = useState<Link[]>([])
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
+  const [editingId, setEditingId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     category: 'other',
     title: '',
     url: '',
     description: '',
   })
+
+  const refreshLinks = async () => {
+    const res = await fetch('/api/links')
+    if (!res.ok) {
+      setError(await getApiError(res, 'Could not load links.'))
+      return
+    }
+    const data = await res.json()
+    setLinks(data.data)
+  }
 
   useEffect(() => {
     fetch('/api/links').then(async res => {
@@ -35,31 +57,38 @@ export default function LinksPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const method = editingId ? 'PUT' : 'POST'
+    setSaving(true)
+    setError(null)
     try {
       const response = await fetch('/api/links', {
-        method: 'POST',
+        method,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('adminToken') || ''}`,
         },
-        body: JSON.stringify({ ...formData, active: true, sort_order: links.length + 1 }),
+        body: JSON.stringify({ ...(editingId && { id: editingId }), ...formData, active: true, sort_order: links.length + 1 }),
       })
-      if (response.ok) {
-        const res = await fetch('/api/links')
-        if (res.ok) {
-          const data = await res.json()
-          setLinks(data.data)
-        }
-        setFormData({ category: 'other', title: '', url: '', description: '' })
-        setShowForm(false)
+      if (!response.ok) {
+        setError(await getApiError(response, 'Link could not be saved. Check the fields and try again.'))
+        return
       }
+
+      await refreshLinks()
+      setFormData({ category: 'other', title: '', url: '', description: '' })
+      setEditingId(null)
+      setShowForm(false)
     } catch (error) {
       console.error('Error saving link:', error)
+      setError('Link could not be saved. Check your connection and try again.')
+    } finally {
+      setSaving(false)
     }
   }
 
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this link?')) return
+    setError(null)
     try {
       const response = await fetch('/api/links', {
         method: 'DELETE',
@@ -69,16 +98,28 @@ export default function LinksPage() {
         },
         body: JSON.stringify({ id }),
       })
-      if (response.ok) {
-        const res = await fetch('/api/links')
-        if (res.ok) {
-          const data = await res.json()
-          setLinks(data.data)
-        }
+      if (!response.ok) {
+        setError(await getApiError(response, 'Link could not be deleted.'))
+        return
       }
+
+      await refreshLinks()
     } catch (error) {
       console.error('Error deleting link:', error)
+      setError('Link could not be deleted. Check your connection and try again.')
     }
+  }
+
+  const handleEdit = (link: Link) => {
+    setError(null)
+    setFormData({
+      category: link.category,
+      title: link.title,
+      url: link.url,
+      description: link.description || '',
+    })
+    setEditingId(link.id)
+    setShowForm(true)
   }
 
   return (
@@ -86,12 +127,23 @@ export default function LinksPage() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="font-serif text-4xl font-bold text-neutral-text">Links</h1>
         <button
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => {
+            setShowForm(!showForm)
+            setEditingId(null)
+            setError(null)
+            setFormData({ category: 'other', title: '', url: '', description: '' })
+          }}
           className="bg-accent-sky-blue text-white px-4 py-2 rounded font-semibold hover:opacity-90"
         >
           {showForm ? 'Cancel' : 'New Link'}
         </button>
       </div>
+
+      {error && (
+        <div role="alert" className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800">
+          {error}
+        </div>
+      )}
 
       {showForm && (
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg border border-neutral-medium-gray mb-8 space-y-4">
@@ -143,8 +195,8 @@ export default function LinksPage() {
             />
           </div>
 
-          <button type="submit" className="bg-accent-sky-blue text-white px-6 py-2 rounded font-semibold hover:opacity-90">
-            Add Link
+          <button type="submit" className="bg-accent-sky-blue text-white px-6 py-2 rounded font-semibold hover:opacity-90 disabled:opacity-60" disabled={saving}>
+            {saving ? 'Saving...' : editingId ? 'Update Link' : 'Add Link'}
           </button>
         </form>
       )}
@@ -163,9 +215,14 @@ export default function LinksPage() {
                 <p className="font-semibold text-neutral-text">{link.title}</p>
                 <p className="text-xs text-neutral-dark-gray">{link.category}</p>
               </div>
-              <button onClick={() => handleDelete(link.id)} className="text-accent-pink text-sm font-semibold">
-                Delete
-              </button>
+              <div className="flex gap-3">
+                <button onClick={() => handleEdit(link)} className="text-accent-cyan text-sm font-semibold" disabled={saving}>
+                  Edit
+                </button>
+                <button onClick={() => handleDelete(link.id)} className="text-accent-pink text-sm font-semibold" disabled={saving}>
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
