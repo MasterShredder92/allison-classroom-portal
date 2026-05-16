@@ -32,14 +32,14 @@ function getGoogleCalendarEmbedUrl(input?: string) {
     if (url.pathname.includes('/calendar/embed')) return url.toString()
 
     const src = url.searchParams.get('src')
-    if (src) {
-      const embedUrl = new URL('https://calendar.google.com/calendar/embed')
-      embedUrl.searchParams.set('src', src)
-      embedUrl.searchParams.set('ctz', url.searchParams.get('ctz') || 'America/Chicago')
-      return embedUrl.toString()
-    }
+    const ctz = url.searchParams.get('ctz') || 'America/Chicago'
+    const embedUrl = new URL('https://calendar.google.com/calendar/embed')
 
-    return ''
+    if (src) embedUrl.searchParams.set('src', src)
+    embedUrl.searchParams.set('ctz', ctz)
+    embedUrl.searchParams.set('mode', url.searchParams.get('mode') || 'WEEK')
+
+    return embedUrl.toString()
   } catch {
     return ''
   }
@@ -113,13 +113,20 @@ export default function SchedulePage() {
         ) : schedule ? (
           <div className="space-y-6">
             {calendarEmbedUrl ? (
-              <div className="overflow-hidden rounded-[1.5rem] border border-neutral-medium-gray/70 bg-white shadow-sm">
-                <iframe
-                  title="Classroom Google Calendar"
-                  src={calendarEmbedUrl}
-                  className="h-[620px] w-full border-0"
-                  loading="lazy"
-                />
+              <div className="space-y-4 rounded-[1.5rem] border border-neutral-medium-gray/70 bg-white p-3 shadow-sm">
+                <div className="overflow-hidden rounded-[1.25rem] border border-neutral-medium-gray/50 bg-white">
+                  <iframe
+                    title="Classroom Google Calendar"
+                    src={calendarEmbedUrl}
+                    className="h-[620px] w-full border-0 sm:h-[720px]"
+                    loading="lazy"
+                  />
+                </div>
+                {safeScheduleLink && (
+                  <a href={safeScheduleLink} target="_blank" rel="noreferrer" className="inline-flex rounded-xl bg-accent-cyan px-5 py-3 font-black text-white hover:opacity-90">
+                    Open Schedule / Calendar
+                  </a>
+                )}
               </div>
             ) : showImage && safeScheduleLink ? (
               <div className="overflow-hidden rounded-[1.5rem] border border-neutral-medium-gray/70 bg-white p-3 shadow-sm">
