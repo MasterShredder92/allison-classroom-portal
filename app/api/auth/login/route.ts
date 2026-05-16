@@ -20,13 +20,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 
-    const { data: userRole } = await supabase
+    const { data: userRoleById } = await supabase
       .from('users')
       .select('role')
       .eq('id', data.user.id)
-      .single()
+      .maybeSingle()
 
-    if (userRole?.role !== 'admin') {
+    const { data: userRoleByEmail } = userRoleById?.role === 'admin'
+      ? { data: null }
+      : await supabase
+        .from('users')
+        .select('role')
+        .eq('email', data.user.email)
+        .maybeSingle()
+
+    if (userRoleById?.role !== 'admin' && userRoleByEmail?.role !== 'admin') {
       return NextResponse.json({ error: 'Not authorized' }, { status: 403 })
     }
 

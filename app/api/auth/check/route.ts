@@ -18,13 +18,21 @@ export async function GET(request: NextRequest) {
     }
 
     const supabase = createServiceSupabaseClient()
-    const { data: adminCheck } = await supabase
+    const { data: adminCheckById } = await supabase
       .from('users')
       .select('role')
       .eq('id', authData.user.id)
-      .single()
+      .maybeSingle()
 
-    if (adminCheck?.role !== 'admin') {
+    const { data: adminCheckByEmail } = adminCheckById?.role === 'admin'
+      ? { data: null }
+      : await supabase
+        .from('users')
+        .select('role')
+        .eq('email', authData.user.email)
+        .maybeSingle()
+
+    if (adminCheckById?.role !== 'admin' && adminCheckByEmail?.role !== 'admin') {
       return NextResponse.json({ authenticated: false }, { status: 403 })
     }
 
