@@ -83,27 +83,27 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="classroom-shell home-polish py-8 sm:py-12">
-      <section className="home-hero-gloss relative overflow-hidden rounded-[2.5rem] border-2 border-neutral-text/10 bg-white/72 p-5 shadow-[0_30px_90px_rgba(65,47,25,0.16)] backdrop-blur-xl sm:p-8 lg:p-10">
+    <div className="classroom-shell home-polish py-5 sm:py-10">
+      <section className="home-hero-gloss relative overflow-hidden rounded-[2.1rem] border-2 border-neutral-text/10 bg-white/72 p-5 shadow-[0_30px_90px_rgba(65,47,25,0.16)] backdrop-blur-xl sm:p-8 lg:p-10">
         <div className="absolute inset-x-0 top-0 h-3 bg-gradient-to-r from-accent-pink via-accent-yellow via-accent-cyan via-accent-sky-blue to-accent-purple" />
         <span className="sticker-dot left-8 top-20 h-10 w-10 bg-accent-yellow/70 floaty" style={{ '--rotate': '9deg' } as CSSProperties} />
         <span className="sticker-dot bottom-8 right-16 h-14 w-14 bg-accent-pink/35 floaty-slow" style={{ '--rotate': '-7deg' } as CSSProperties} />
         <span className="sticker-dot right-[42%] top-12 h-6 w-6 bg-accent-cyan/65 floaty" style={{ '--rotate': '11deg' } as CSSProperties} />
 
-        <div className="relative z-10 grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+        <div className="relative z-10 grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
           <div className="reveal-up">
             <span className="section-eyebrow">Parent Resource Hub</span>
-            <h1 className="mt-5 max-w-3xl font-serif text-5xl font-black leading-[0.9] tracking-tight text-neutral-text sm:text-6xl lg:text-7xl">
+            <h1 className="mt-5 max-w-3xl font-serif text-[clamp(2.75rem,12vw,4.5rem)] font-black leading-[0.92] tracking-tight text-neutral-text lg:text-7xl">
               Welcome to Allison&apos;s Classroom.
             </h1>
-            <p className="mt-6 max-w-2xl text-lg font-bold leading-8 text-neutral-dark-gray sm:text-xl">
+            <p className="mt-5 max-w-2xl text-base font-bold leading-7 text-neutral-dark-gray sm:text-xl sm:leading-8">
               One warm, organized place for announcements, assignments, schedules, links, and classroom moments for Allison&apos;s 5th and 6th grade families.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link href="/news" className="fun-button rounded-full bg-accent-cyan px-7 py-3.5 text-center font-black text-white shadow-xl shadow-cyan-200">See Latest News</Link>
               <Link href="/links" className="fun-button rounded-full border-2 border-neutral-medium-gray bg-white px-7 py-3.5 text-center font-black text-neutral-text shadow-sm hover:border-accent-pink">Open Parent Links</Link>
             </div>
-            <div className="mt-8 grid max-w-2xl grid-cols-3 gap-3">
+            <div className="home-mini-stats mt-7 grid max-w-2xl grid-cols-3 gap-3">
               {['News', 'Work', 'Moments'].map((item, index) => (
                 <div key={item} className="rounded-[1.25rem] border-2 border-white/80 bg-white/70 p-3 text-center shadow-sm backdrop-blur" style={{ transform: `rotate(${[-1.2, 1, -0.7][index]}deg)` }}>
                   <p className="font-serif text-2xl font-black text-neutral-text">{['📌', '🚀', '📸'][index]}</p>
@@ -113,7 +113,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="chalkboard floaty-slow min-h-[420px] rounded-[2.2rem] p-5 text-white" style={{ '--rotate': '1deg' } as CSSProperties}>
+          <div className="chalkboard home-board floaty-slow min-h-[420px] rounded-[2.2rem] p-5 text-white" style={{ '--rotate': '1deg' } as CSSProperties}>
             <div className="relative z-10 flex h-full flex-col rounded-[1.45rem] border-2 border-white/12 p-6">
               <div className="mb-5 flex items-center justify-between gap-4">
                 <p className="font-serif text-4xl font-black">Today in class</p>
@@ -139,7 +139,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mt-10">
+      <section className="mt-8 sm:mt-10">
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>
             <span className="section-eyebrow home-black-label">Quick Access</span>
@@ -149,7 +149,7 @@ export default function Home() {
         <QuickLinkBar />
       </section>
 
-      <div className="mt-12 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+      <div className="mt-10 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
         <section className="paper-card rounded-[2.2rem] p-6 sm:p-8">
           <div className="relative z-10 mb-6 flex items-center justify-between gap-4">
             <div>
@@ -174,7 +174,7 @@ export default function Home() {
         </section>
       </div>
 
-      <section id="classes" className="mt-12">
+      <section id="classes" className="mt-10">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <span className="section-eyebrow home-black-label">Classrooms</span>

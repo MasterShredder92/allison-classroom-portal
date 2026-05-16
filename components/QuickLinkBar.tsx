@@ -9,17 +9,17 @@ const quickLinks = [
 
 export default function QuickLinkBar() {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="quick-link-grid grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {quickLinks.map((link) => (
-        <a key={link.title} href={link.url} target="_blank" rel="noopener noreferrer" className={`focus-ring group paper-card pop-card drag-hint overflow-hidden rounded-[1.8rem] border-b-[6px] ${link.border} bg-gradient-to-br ${link.color} p-5`} style={{ '--tilt': link.rotate } as CSSProperties}>
+        <a key={link.title} href={link.url} target="_blank" rel="noopener noreferrer" className={`focus-ring group quick-link-card paper-card pop-card drag-hint overflow-hidden rounded-[1.55rem] border-b-[5px] ${link.border} bg-gradient-to-br ${link.color} p-4 sm:p-5`} style={{ '--tilt': link.rotate } as CSSProperties}>
           <div className="tape left-7 top-[-4px] rotate-[-5deg]" />
-          <div className="relative z-10 flex min-h-32 flex-col justify-between gap-5">
+          <div className="relative z-10 flex min-h-28 flex-col justify-between gap-4">
             <div className="flex items-start justify-between gap-4">
-              <div className="grid h-14 w-14 place-items-center rounded-[1.25rem] bg-white text-3xl shadow-sm transition-transform duration-200 group-hover:rotate-6 group-hover:scale-110">{link.icon}</div>
+              <div className="quick-link-icon grid h-12 w-12 place-items-center rounded-[1.15rem] bg-white text-3xl shadow-sm transition-transform duration-200 group-hover:rotate-6 group-hover:scale-110">{link.icon}</div>
               <span className="quick-arrow-badge rounded-full px-3.5 py-2 text-base font-black transition-transform group-hover:translate-x-1 group-hover:-rotate-6">→</span>
             </div>
             <div>
-              <p className="font-serif text-2xl font-black leading-none text-neutral-text">{link.title}</p>
+              <p className="font-serif text-[1.35rem] font-black leading-none text-neutral-text sm:text-2xl">{link.title}</p>
               <p className="mt-2 text-sm font-bold text-neutral-dark-gray">{link.note}</p>
             </div>
           </div>

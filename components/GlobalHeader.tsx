@@ -40,9 +40,9 @@ export default function GlobalHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b-2 border-neutral-medium-gray/60 bg-white/72 shadow-[0_14px_34px_rgba(65,47,25,0.10)] backdrop-blur-2xl">
-      <nav className="classroom-shell flex min-h-20 items-center justify-between gap-4 py-3">
+      <nav className="classroom-shell flex min-h-16 items-center justify-between gap-3 py-2.5 sm:min-h-20 sm:gap-4 sm:py-3">
         <Link href="/" className="focus-ring group flex items-center gap-3 rounded-[1.35rem]">
-          <div className="relative grid h-14 w-14 place-items-center rounded-[1.35rem] bg-accent-cyan shadow-lg shadow-cyan-200/70 transition-transform duration-200 group-hover:-rotate-3 group-hover:scale-105">
+          <div className="relative grid h-12 w-12 place-items-center rounded-[1.2rem] bg-accent-cyan shadow-lg shadow-cyan-200/70 transition-transform duration-200 group-hover:-rotate-3 group-hover:scale-105 sm:h-14 sm:w-14 sm:rounded-[1.35rem]">
             <span className="absolute -left-1 -top-1 h-5 w-5 rounded-full border-2 border-white bg-accent-yellow" />
             <span className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full border-2 border-white bg-accent-pink" />
             <span className="font-serif text-3xl font-black leading-none text-white drop-shadow-sm">A</span>
@@ -90,7 +90,7 @@ export default function GlobalHeader() {
           <Link href="/admin/login" className="fun-button rounded-full border-2 border-neutral-text/10 bg-neutral-text px-4 py-2 text-sm font-black text-white shadow-sm hover:bg-accent-cyan">Teacher Login</Link>
         </div>
 
-        <button onClick={() => setMenuOpen(!menuOpen)} className="focus-ring lg:hidden rounded-[1.2rem] border-2 border-neutral-medium-gray/70 bg-white/86 p-3 shadow-sm transition hover:-translate-y-0.5" aria-label="Toggle navigation menu">
+        <button onClick={() => setMenuOpen(!menuOpen)} className="focus-ring lg:hidden rounded-[1.05rem] border-2 border-neutral-medium-gray/70 bg-white/86 p-2.5 shadow-sm transition hover:-translate-y-0.5" aria-label="Toggle navigation menu">
           <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {menuOpen ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18 18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 7h16M4 12h16M4 17h16" />}
           </svg>
@@ -98,7 +98,7 @@ export default function GlobalHeader() {
       </nav>
 
       {menuOpen && (
-        <div className="border-t-2 border-neutral-medium-gray/60 bg-white/96 backdrop-blur-xl lg:hidden">
+        <div className="mobile-nav-panel border-t-2 border-neutral-medium-gray/60 bg-white/96 backdrop-blur-xl lg:hidden">
           <div className="classroom-shell space-y-2 py-4">
             <Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-black hover:bg-neutral-off-white">About</Link>
             <Link href="/news" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-black hover:bg-neutral-off-white">News</Link>

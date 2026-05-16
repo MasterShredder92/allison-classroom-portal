@@ -1032,3 +1032,289 @@ main [contenteditable='true'] {
     transform: translateY(-3px) rotate(var(--tilt, -0.4deg));
   }
 }
+
+/* Focused design cleanup: lighter, friendlier, less clunky without a full redesign. */
+.home-polish .home-hero-gloss,
+.home-polish .paper-card,
+.home-polish .bulletin-card,
+.home-polish .empty-state,
+.quick-link-card {
+  border-width: 1.5px !important;
+  box-shadow:
+    0 22px 58px rgba(18, 45, 43, 0.18),
+    0 7px 18px rgba(255, 137, 198, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+}
+
+.home-polish .home-hero-gloss {
+  background:
+    radial-gradient(circle at 9% 16%, rgba(255, 224, 141, 0.18), transparent 13rem),
+    radial-gradient(circle at 90% 14%, rgba(0, 208, 208, 0.18), transparent 15rem),
+    linear-gradient(135deg, rgba(40, 98, 79, 0.92), rgba(31, 77, 64, 0.88) 50%, rgba(55, 72, 126, 0.84)) !important;
+}
+
+.home-board {
+  box-shadow: 0 24px 62px rgba(12, 34, 32, 0.24), inset 0 0 0 2px rgba(255,255,255,0.05) !important;
+}
+
+.quick-link-card {
+  min-width: 0;
+  transform-origin: center;
+}
+
+.quick-link-card .tape {
+  opacity: 0.74;
+}
+
+.quick-link-icon {
+  box-shadow: 0 10px 24px rgba(12, 34, 32, 0.16), inset 0 1px 0 rgba(255,255,255,0.78) !important;
+}
+
+.home-mini-stats > div {
+  box-shadow: 0 12px 26px rgba(12, 34, 32, 0.12), inset 0 1px 0 rgba(255,255,255,0.34) !important;
+}
+
+.page-hero,
+.paper-card,
+.bulletin-card,
+.empty-state,
+.resource-preview {
+  max-width: 100%;
+}
+
+iframe,
+img,
+svg,
+video {
+  max-width: 100%;
+}
+
+.fun-button {
+  min-height: 2.75rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .quick-link-card:hover {
+    transform: translateY(-5px) rotate(var(--tilt, -0.4deg));
+  }
+}
+
+/* Mobile cleanup: prevent off-edge layouts, reduce vertical bulk, and keep the site centered. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  text-wrap: pretty;
+}
+
+.classroom-shell {
+  width: min(100% - 2rem, var(--shell-max, 1180px));
+  margin-inline: auto;
+}
+
+.mobile-nav-panel {
+  max-height: calc(100dvh - 4.5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 767px) {
+  .classroom-shell {
+    width: min(100% - 1rem, var(--shell-max, 1180px));
+  }
+
+  main {
+    overflow-x: clip;
+  }
+
+  .rainbow-strip {
+    height: 0.42rem;
+  }
+
+  .home-polish {
+    padding-top: 1rem !important;
+    padding-bottom: 1.35rem !important;
+  }
+
+  .home-polish .home-hero-gloss,
+  .page-hero,
+  .paper-card,
+  .bulletin-card,
+  .empty-state {
+    border-radius: 1.35rem !important;
+  }
+
+  .home-polish .home-hero-gloss {
+    padding: 1.15rem !important;
+    box-shadow: 0 16px 34px rgba(18, 45, 43, 0.18) !important;
+  }
+
+  .home-polish .sticker-dot,
+  .page-hero::after,
+  .drag-hint::after,
+  .tape {
+    display: none !important;
+  }
+
+  .home-polish h1 {
+    max-width: 11ch;
+    margin-top: 0.85rem !important;
+    font-size: clamp(2.25rem, 13vw, 3.25rem) !important;
+    line-height: 0.94 !important;
+  }
+
+  .home-polish h2,
+  #classes h2 {
+    font-size: clamp(2rem, 10vw, 2.75rem) !important;
+    line-height: 0.96 !important;
+  }
+
+  .home-polish p {
+    overflow-wrap: anywhere;
+  }
+
+  .home-mini-stats {
+    grid-template-columns: 1fr !important;
+    gap: 0.55rem !important;
+  }
+
+  .home-mini-stats > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transform: none !important;
+    padding: 0.7rem 0.85rem !important;
+  }
+
+  .home-mini-stats > div p {
+    margin: 0 !important;
+  }
+
+  .home-board {
+    min-height: auto !important;
+    transform: none !important;
+    border-radius: 1.35rem !important;
+    padding: 1rem !important;
+  }
+
+  .home-board > div {
+    padding: 1rem !important;
+  }
+
+  .home-board p.font-serif {
+    font-size: clamp(1.7rem, 8vw, 2.25rem) !important;
+  }
+
+  .home-board li {
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .home-board span.rounded-full {
+    white-space: nowrap;
+  }
+
+  .quick-link-grid {
+    gap: 0.75rem !important;
+  }
+
+  .quick-link-card {
+    transform: none !important;
+    border-radius: 1.2rem !important;
+    border-bottom-width: 4px !important;
+    padding: 0.95rem !important;
+  }
+
+  .quick-link-card > div:not(.tape) {
+    min-height: auto !important;
+    gap: 0.85rem !important;
+  }
+
+  .quick-link-icon {
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+    font-size: 1.55rem !important;
+  }
+
+  .quick-arrow-badge {
+    padding: 0.45rem 0.72rem !important;
+    font-size: 0.95rem !important;
+  }
+
+  .fun-button,
+  a.fun-button,
+  button.fun-button {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .page-hero,
+  .paper-card,
+  .bulletin-card,
+  .empty-state {
+    padding: 1.05rem !important;
+  }
+
+  .page-hero h1,
+  .page-hero h2 {
+    font-size: clamp(2.45rem, 12vw, 3.35rem) !important;
+    line-height: 0.95 !important;
+  }
+
+  .page-hero p,
+  .paper-card p,
+  .bulletin-card p {
+    line-height: 1.55 !important;
+  }
+
+  .resource-preview {
+    border-radius: 1rem !important;
+  }
+
+  .resource-preview__frame,
+  .resource-preview iframe {
+    min-height: 320px !important;
+    max-height: 62dvh !important;
+  }
+
+  .calendar-preview,
+  .calendar-preview iframe,
+  iframe[title*="Calendar"],
+  iframe[src*="calendar.google.com"] {
+    min-height: 430px !important;
+    height: 58dvh !important;
+  }
+
+  footer {
+    margin-top: 2rem !important;
+  }
+
+  footer .paper-card {
+    gap: 1rem !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .classroom-shell {
+    width: min(100% - 0.75rem, var(--shell-max, 1180px));
+  }
+
+  .home-polish .home-hero-gloss,
+  .page-hero,
+  .paper-card,
+  .bulletin-card,
+  .empty-state {
+    padding: 0.95rem !important;
+  }
+
+  .section-eyebrow {
+    max-width: 100%;
+    letter-spacing: 0.12em !important;
+    font-size: 0.65rem !important;
+  }
+}
