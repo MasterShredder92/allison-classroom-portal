@@ -1,64 +1,26 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-
-interface PageContent {
-  slug: string
-  title: string
-  body_markdown: string
-}
-
 export default function ContactPage() {
-  const [content, setContent] = useState<PageContent | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const res = await fetch('/api/page-content/contact')
-        if (res.ok) {
-          const data = await res.json()
-          setContent(data.data)
-        }
-      } catch (error) {
-        console.error('Error fetching content:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchContent()
-  }, [])
-
-  if (loading) {
-    return (
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="h-10 bg-neutral-light-gray rounded mb-8 animate-pulse" />
-        <div className="space-y-4">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="h-20 bg-neutral-light-gray rounded animate-pulse" />
-          ))}
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {content ? (
-        <>
-          <h1 className="font-serif text-4xl font-bold text-neutral-text mb-8">
-            {content.title}
-          </h1>
-          <div className="prose prose-sm max-w-none text-neutral-text space-y-4">
-            <div dangerouslySetInnerHTML={{ __html: content.body_markdown }} />
-          </div>
-        </>
-      ) : (
-        <div className="text-center py-12">
-          <p className="text-neutral-dark-gray">Contact information not available yet.</p>
+    <div className="classroom-shell py-10 sm:py-14">
+      <section className="paper-card rounded-[2rem] p-8 sm:p-10">
+        <div className="relative z-10 max-w-3xl">
+          <span className="section-eyebrow">Contact</span>
+          <h1 className="mt-4 font-serif text-5xl font-black tracking-tight text-neutral-text">Need to reach Allison?</h1>
+          <p className="mt-4 text-lg leading-8 text-neutral-dark-gray">Use the school&apos;s preferred communication channel for classroom questions, assignment clarification, or schedule needs.</p>
         </div>
-      )}
+      </section>
+      <section className="mt-8 grid gap-5 md:grid-cols-2">
+        <div className="rounded-[1.7rem] border border-neutral-medium-gray/70 bg-white p-7 shadow-sm">
+          <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-accent-light-pink/45 text-2xl">💬</div>
+          <h2 className="font-serif text-2xl font-black text-neutral-text">Classroom communication</h2>
+          <p className="mt-3 leading-7 text-neutral-dark-gray">Check ClassDojo, Google Classroom, and posted announcements first for routine updates.</p>
+        </div>
+        <div className="rounded-[1.7rem] border border-neutral-medium-gray/70 bg-white p-7 shadow-sm">
+          <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-accent-sky-blue/40 text-2xl">🏫</div>
+          <h2 className="font-serif text-2xl font-black text-neutral-text">School office</h2>
+          <p className="mt-3 leading-7 text-neutral-dark-gray">For urgent or official school matters, use Wilmot Public School&apos;s office communication process.</p>
+        </div>
+      </section>
     </div>
   )
 }
+

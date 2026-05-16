@@ -1,5 +1,4 @@
-'use client'
-
+"use client"
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import AssignmentCard from '@/components/AssignmentCard'
@@ -15,8 +14,9 @@ interface Class {
 interface Assignment {
   id: string
   class_id: string
+  class_name?: string
   title: string
-  description: string
+  description?: string
   due_date: string
   resource_type?: string
   resource_url?: string
@@ -26,7 +26,6 @@ interface Assignment {
 export default function ClassPage() {
   const params = useParams()
   const slug = params.slug as string
-
   const [classInfo, setClassInfo] = useState<Class | null>(null)
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [loading, setLoading] = useState(true)
@@ -34,22 +33,15 @@ export default function ClassPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [classesRes, assignmentsRes] = await Promise.all([
-          fetch('/api/classes'),
-          fetch(`/api/assignments?class_id=${slug}`),
-        ])
-
+        const [classesRes, assignmentsRes] = await Promise.all([fetch('/api/classes'), fetch(`/api/assignments?class_id=${slug}`)])
         if (classesRes.ok) {
           const data = await classesRes.json()
           const foundClass = data.data.find((c: Class) => c.slug === slug)
           setClassInfo(foundClass || null)
         }
-
         if (assignmentsRes.ok) {
           const data = await assignmentsRes.json()
-          const sorted = data.data.sort((a: any, b: any) =>
-            new Date(b.due_date).getTime() - new Date(a.due_date).getTime()
-          )
+          const sorted = data.data.sort((a: Assignment, b: Assignment) => new Date(b.due_date).getTime() - new Date(a.due_date).getTime())
           setAssignments(sorted)
         }
       } catch (error) {
@@ -58,59 +50,33 @@ export default function ClassPage() {
         setLoading(false)
       }
     }
-
     fetchData()
   }, [slug])
 
   if (loading) {
-    return (
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="h-12 bg-neutral-light-gray rounded mb-8 animate-pulse" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-32 bg-neutral-light-gray rounded-lg animate-pulse" />
-          ))}
-        </div>
-      </div>
-    )
+    return <div className="classroom-shell py-12"><div className="h-52 animate-pulse rounded-[2rem] bg-white/80" /><div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">{[1, 2, 3, 4].map(i => <div key={i} className="h-36 animate-pulse rounded-[1.5rem] bg-white/80" />)}</div></div>
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="classroom-shell py-10 sm:py-14">
       {classInfo ? (
         <>
-          <div className="mb-12">
-            <h1 className="font-serif text-4xl font-bold text-neutral-text mb-2">
-              {classInfo.display_name}
-            </h1>
-            <p className="text-neutral-dark-gray text-lg">
-              {classInfo.grade} Grade {classInfo.subject}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="font-serif text-2xl font-semibold text-neutral-text mb-6">
-              Assignments
-            </h2>
-
-            {assignments.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {assignments.map(assignment => (
-                  <AssignmentCard key={assignment.id} assignment={assignment} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 bg-neutral-light-gray rounded-lg">
-                <p className="text-neutral-dark-gray">No assignments yet for this class.</p>
-              </div>
-            )}
-          </div>
+          <section className="paper-card rounded-[2rem] p-8 sm:p-10">
+            <div className="relative z-10 max-w-3xl">
+              <span className="section-eyebrow">{classInfo.grade} Grade</span>
+              <h1 className="mt-4 font-serif text-5xl font-black tracking-tight text-neutral-text">{classInfo.display_name}</h1>
+              <p className="mt-4 text-lg leading-8 text-neutral-dark-gray">Assignments and resources for {classInfo.subject}. This page keeps the class-specific work easy for families to find.</p>
+            </div>
+          </section>
+          <section className="mt-8">
+            <h2 className="mb-5 font-serif text-3xl font-black text-neutral-text">Assignments</h2>
+            {assignments.length > 0 ? <div className="grid grid-cols-1 gap-4 md:grid-cols-2">{assignments.map(assignment => <AssignmentCard key={assignment.id} assignment={assignment} />)}</div> : <div className="empty-state rounded-[2rem] p-10 text-center"><div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl bg-accent-yellow/35 text-3xl">📝</div><h3 className="font-serif text-3xl font-black text-neutral-text">No assignments yet</h3><p className="mx-auto mt-3 max-w-xl leading-7 text-neutral-dark-gray">Assignments for this class will appear here after Allison posts them.</p></div>}
+          </section>
         </>
       ) : (
-        <div className="text-center py-12">
-          <p className="text-neutral-dark-gray text-lg">Class not found.</p>
-        </div>
+        <div className="empty-state rounded-[2rem] p-10 text-center"><h1 className="font-serif text-4xl font-black text-neutral-text">Class not found</h1><p className="mt-3 text-neutral-dark-gray">This class page is not available.</p></div>
       )}
     </div>
   )
 }
+

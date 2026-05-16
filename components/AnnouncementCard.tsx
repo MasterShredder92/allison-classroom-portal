@@ -16,46 +16,23 @@ export default function AnnouncementCard({ announcement }: { announcement: Annou
   })
 
   return (
-    <div className="bg-neutral-light-gray rounded-lg p-6 border-l-4 border-accent-pink hover:shadow-md transition-shadow">
-      <div className="flex items-start justify-between gap-4 mb-2">
-        <h3 className="font-serif text-xl font-semibold text-neutral-text flex-1">
-          {announcement.title}
-        </h3>
-        {announcement.pinned && (
-          <span className="bg-accent-pink text-white text-xs font-semibold px-2 py-1 rounded whitespace-nowrap">
-            Pinned
-          </span>
-        )}
+    <article className="group relative overflow-hidden rounded-[1.5rem] border border-neutral-medium-gray/70 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-xl">
+      <div className="absolute inset-y-0 left-0 w-2 bg-accent-pink" />
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="mb-2 text-xs font-black uppercase tracking-[0.18em] text-accent-pink">{formattedDate}</p>
+          <h3 className="font-serif text-2xl font-black leading-tight text-neutral-text">{announcement.title}</h3>
+        </div>
+        {announcement.pinned && <span className="rounded-full bg-accent-pink px-3 py-1 text-xs font-black text-white shadow-sm">Pinned</span>}
       </div>
-
-      <p className="text-neutral-dark-gray text-sm mb-3">{formattedDate}</p>
-
-      <p className="text-neutral-text leading-relaxed mb-4">{announcement.body}</p>
-
+      <p className="mt-4 leading-7 text-neutral-dark-gray">{announcement.body}</p>
       {(announcement.attachment_url || announcement.link_url) && (
-        <div className="flex gap-2">
-          {announcement.attachment_url && (
-            <a
-              href={announcement.attachment_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent-cyan hover:underline text-sm font-semibold"
-            >
-              📎 Attachment
-            </a>
-          )}
-          {announcement.link_url && (
-            <a
-              href={announcement.link_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent-cyan hover:underline text-sm font-semibold"
-            >
-              🔗 Link
-            </a>
-          )}
+        <div className="mt-5 flex flex-wrap gap-2">
+          {announcement.attachment_url && <a href={announcement.attachment_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-accent-light-pink/55 px-4 py-2 text-sm font-black text-neutral-text hover:bg-accent-light-pink">Attachment</a>}
+          {announcement.link_url && <a href={announcement.link_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-accent-cyan px-4 py-2 text-sm font-black text-white hover:opacity-90">Open link →</a>}
         </div>
       )}
-    </div>
+    </article>
   )
 }
+

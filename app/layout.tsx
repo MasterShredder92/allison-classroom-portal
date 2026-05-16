@@ -14,12 +14,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-neutral-off-white text-neutral-text font-sans antialiased min-h-screen flex flex-col">
+      <body className="text-neutral-text font-sans antialiased min-h-screen flex flex-col">
+        <div className="rainbow-strip" />
         <GlobalHeader />
-        <main className="flex-1">{children}</main>
-        <footer className="bg-neutral-light-gray border-t border-neutral-medium-gray mt-16 py-8">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-dark-gray text-sm">
-            <p>© 2026 Allison's Classroom. All rights reserved.</p>
+        <main className="relative z-10 flex-1">{children}</main>
+        <footer className="relative z-10 mt-20 border-t border-neutral-medium-gray/70 bg-white/65 backdrop-blur">
+          <div className="classroom-shell py-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-sm text-neutral-dark-gray">
+            <p className="font-semibold text-neutral-text">© 2026 Allison&apos;s Classroom</p>
+            <p>Built for clear parent communication, assignments, schedules, and classroom updates.</p>
           </div>
         </footer>
       </body>
