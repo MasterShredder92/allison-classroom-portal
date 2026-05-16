@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import AdminQuickResourcePost from '@/components/AdminQuickResourcePost'
 
 interface DashboardStats {
   announcements: number
@@ -128,7 +129,9 @@ export default function AdminDashboard() {
         </div>
       ) : null}
 
-      <div className="bg-white p-6 rounded-lg border border-neutral-medium-gray">
+      <AdminQuickResourcePost />
+
+      <div className="admin-doc-card mt-8 p-6">
         <h2 className="font-serif text-2xl font-semibold text-neutral-text mb-6">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Link

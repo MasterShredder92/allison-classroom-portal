@@ -146,14 +146,14 @@ export default function LinksPage() {
       )}
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg border border-neutral-medium-gray mb-8 space-y-4">
+        <form onSubmit={handleSubmit} className="admin-doc-card mb-8 space-y-4 p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-neutral-text mb-2">Category</label>
+              <label className="mb-2 block text-sm font-bold text-neutral-text">Category</label>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+                className="admin-input"
               >
                 {categories.map(cat => (
                   <option key={cat} value={cat}>
@@ -163,35 +163,38 @@ export default function LinksPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-neutral-text mb-2">Title</label>
+              <label className="mb-2 block text-sm font-bold text-neutral-text">Title</label>
               <input
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+                className="admin-input"
+                dir="ltr"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-neutral-text mb-2">URL</label>
+            <label className="mb-2 block text-sm font-bold text-neutral-text">URL</label>
             <input
               type="url"
               value={formData.url}
               onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-              className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+              className="admin-input"
+                dir="ltr"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-neutral-text mb-2">Description</label>
+            <label className="mb-2 block text-sm font-bold text-neutral-text">Description</label>
             <input
               type="text"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+              className="admin-input"
+              dir="ltr"
             />
           </div>
 
@@ -210,7 +213,7 @@ export default function LinksPage() {
       ) : links.length > 0 ? (
         <div className="space-y-2">
           {links.map(link => (
-            <div key={link.id} className="bg-white p-4 rounded border border-neutral-medium-gray flex items-start justify-between">
+            <div key={link.id} className="admin-doc-card flex items-start justify-between p-4">
               <div className="flex-1">
                 <p className="font-semibold text-neutral-text">{link.title}</p>
                 <p className="text-xs text-neutral-dark-gray">{link.category}</p>

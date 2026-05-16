@@ -218,7 +218,7 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 md:p-8">{children}</main>
+      <main className="flex-1 p-6 md:p-8" dir="ltr">{children}</main>
     </div>
   )
 }

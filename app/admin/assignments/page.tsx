@@ -169,13 +169,14 @@ export default function AssignmentsPage() {
       )}
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg border border-neutral-medium-gray mb-8 space-y-4">
+        <form onSubmit={handleSubmit} className="admin-doc-card mb-8 space-y-4 p-6">
           <div>
-            <label className="block text-sm font-semibold text-neutral-text mb-2">Class</label>
+            <label className="mb-2 block text-sm font-bold text-neutral-text">Class</label>
             <select
               value={formData.class_id}
               onChange={(e) => setFormData({ ...formData, class_id: e.target.value })}
-              className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+              className="admin-input"
+                dir="ltr"
               required
             >
               <option value="">Select a class</option>
@@ -188,44 +189,48 @@ export default function AssignmentsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-neutral-text mb-2">Title</label>
+            <label className="mb-2 block text-sm font-bold text-neutral-text">Title</label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+              className="admin-input"
+                dir="ltr"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-neutral-text mb-2">Description</label>
+            <label className="mb-2 block text-sm font-bold text-neutral-text">Description</label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan h-20"
+              className="admin-textarea h-24"
+              dir="ltr"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-neutral-text mb-2">Due Date</label>
+              <label className="mb-2 block text-sm font-bold text-neutral-text">Due Date</label>
               <input
                 type="date"
                 value={formData.due_date}
                 onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-                className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+                className="admin-input"
+                dir="ltr"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-neutral-text mb-2">Resource URL</label>
+              <label className="mb-2 block text-sm font-bold text-neutral-text">Resource URL</label>
               <input
                 type="url"
                 value={formData.resource_url}
                 onChange={(e) => setFormData({ ...formData, resource_url: e.target.value })}
-                className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+                className="admin-input"
+                dir="ltr"
               />
             </div>
           </div>
@@ -245,7 +250,7 @@ export default function AssignmentsPage() {
       ) : assignments.length > 0 ? (
         <div className="space-y-2">
           {assignments.map(assignment => (
-            <div key={assignment.id} className="bg-white p-4 rounded border border-neutral-medium-gray flex items-start justify-between">
+            <div key={assignment.id} className="admin-doc-card flex items-start justify-between p-4">
               <div className="flex-1">
                 <p className="font-semibold text-neutral-text">{assignment.title}</p>
                 <p className="text-sm text-neutral-dark-gray">Due: {new Date(assignment.due_date).toLocaleDateString()}</p>

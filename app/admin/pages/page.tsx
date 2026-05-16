@@ -44,6 +44,7 @@ function emptyPage(): PageContent {
 
 export default function AdminPagesPage() {
   const editorRef = useRef<HTMLDivElement | null>(null)
+  const loadedEditorKeyRef = useRef<string>('')
   const [pages, setPages] = useState<PageContent[]>([])
   const [selectedSlug, setSelectedSlug] = useState('about')
   const [currentPage, setCurrentPage] = useState<PageContent | null>(null)
@@ -61,10 +62,16 @@ export default function AdminPagesPage() {
     Authorization: `Bearer ${localStorage.getItem('adminToken') || ''}`,
   })
 
-  const syncEditorToState = () => {
-    if (!editorRef.current || !currentPage) return
-    setCurrentPage({ ...currentPage, body_markdown: editorRef.current.innerHTML })
+  const loadEditorHtml = (page: PageContent | null, force = false) => {
+    if (!editorRef.current || !page) return
+    const key = `${page.id || page.slug || 'new'}:${page.updated_at || ''}:${isNewPage ? 'new' : 'saved'}`
+    if (!force && loadedEditorKeyRef.current === key) return
+    editorRef.current.innerHTML = page.body_markdown || '<p></p>'
+    editorRef.current.setAttribute('dir', 'ltr')
+    loadedEditorKeyRef.current = key
   }
+
+  const readEditorHtml = () => editorRef.current?.innerHTML || currentPage?.body_markdown || ''
 
   const loadPages = async () => {
     setError(null)
@@ -84,6 +91,7 @@ export default function AdminPagesPage() {
     setSelectedSlug(nextPage?.slug || '')
     setIsNewPage(false)
     setLoading(false)
+    window.setTimeout(() => loadEditorHtml(nextPage, true), 0)
   }
 
   useEffect(() => {
@@ -100,9 +108,10 @@ export default function AdminPagesPage() {
   }, [])
 
   useEffect(() => {
-    if (!editorRef.current || !currentPage) return
-    editorRef.current.innerHTML = currentPage.body_markdown || ''
-  }, [currentPage])
+    loadEditorHtml(currentPage)
+    // Do not depend on the whole currentPage object. Replacing innerHTML on every keystroke breaks cursor position.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage?.id, currentPage?.slug, currentPage?.updated_at, isNewPage])
 
   const selectPage = (slug: string) => {
     const page = pages.find(item => item.slug === slug)
@@ -112,34 +121,39 @@ export default function AdminPagesPage() {
     setSelectedSlug(slug)
     setCurrentPage(page)
     setIsNewPage(false)
+    window.setTimeout(() => loadEditorHtml(page, true), 0)
   }
 
   const startNewPage = () => {
     setError(null)
     setSuccess(null)
     const page = emptyPage()
+    loadedEditorKeyRef.current = ''
     setCurrentPage(page)
     setSelectedSlug('')
     setIsNewPage(true)
-    setTimeout(() => {
-      if (editorRef.current) editorRef.current.innerHTML = page.body_markdown
-    }, 0)
+    window.setTimeout(() => loadEditorHtml(page, true), 0)
   }
 
   const runCommand = (command: string, value?: string) => {
+    editorRef.current?.focus()
     document.execCommand(command, false, value)
-    syncEditorToState()
   }
 
   const formatBlock = (tag: string) => {
+    editorRef.current?.focus()
     document.execCommand('formatBlock', false, tag)
-    syncEditorToState()
+  }
+
+  const insertLink = () => {
+    const url = window.prompt('Paste the link URL')
+    if (!url) return
+    runCommand('createLink', url)
   }
 
   const savePage = async () => {
     if (!currentPage) return
-    syncEditorToState()
-    const body = editorRef.current?.innerHTML || currentPage.body_markdown || ''
+    const body = readEditorHtml()
     const slug = currentPage.slug || slugify(currentPage.title)
 
     if (!currentPage.title.trim()) {
@@ -179,6 +193,7 @@ export default function AdminPagesPage() {
       setSelectedSlug(saved.slug)
       setIsNewPage(false)
       setSuccess('Saved. The public site updates immediately—no code, no deploy, no extra step.')
+      window.setTimeout(() => loadEditorHtml(saved, true), 0)
     } catch (error) {
       console.error('Error saving page:', error)
       setError('Page could not be saved. Check your connection and try again.')
@@ -214,6 +229,7 @@ export default function AdminPagesPage() {
       setSelectedSlug(nextPage?.slug || '')
       setIsNewPage(false)
       setSuccess('Deleted. The page has been removed from the public site.')
+      window.setTimeout(() => loadEditorHtml(nextPage, true), 0)
     } catch (error) {
       console.error('Error deleting page:', error)
       setError('Page could not be deleted. Check your connection and try again.')
@@ -222,14 +238,15 @@ export default function AdminPagesPage() {
     }
   }
 
-  if (loading) return <div className="text-center py-12">Loading pages...</div>
+  if (loading) return <div className="py-12 text-center text-neutral-text">Loading pages...</div>
 
   return (
-    <div>
+    <div dir="ltr">
       <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h1 className="font-serif text-4xl font-bold text-neutral-text">Edit Site Pages</h1>
-          <p className="mt-3 max-w-3xl text-neutral-dark-gray">Allison can add pages, edit text, format it like a document, save it, and the public site updates immediately. No HTML. No code. No deploy button.</p>
+          <p className="admin-kicker">Word-style editor</p>
+          <h1 className="font-serif text-4xl font-black text-neutral-text">Edit Site Pages</h1>
+          <p className="admin-muted">Simple document editing: type normally, use basic formatting, save, and the public site updates immediately.</p>
         </div>
         <button type="button" onClick={startNewPage} className="rounded-xl bg-accent-cyan px-5 py-3 font-black text-white hover:opacity-90">
           Add New Page
@@ -240,7 +257,7 @@ export default function AdminPagesPage() {
       {success && <div role="status" className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-green-800">{success}</div>}
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-        <aside className="rounded-2xl border border-neutral-medium-gray bg-white p-4 shadow-sm">
+        <aside className="admin-doc-card p-4">
           <h2 className="mb-3 text-sm font-black uppercase tracking-[0.14em] text-neutral-dark-gray">Pages</h2>
           <div className="space-y-2">
             {pages.map(page => (
@@ -258,55 +275,54 @@ export default function AdminPagesPage() {
           </div>
         </aside>
 
-        <section className="rounded-2xl border border-neutral-medium-gray bg-white p-5 shadow-sm">
+        <section className="admin-doc-card p-5">
           {currentPage ? (
             <div className="space-y-5">
               <div className="grid gap-4 md:grid-cols-[1fr_260px]">
-                <div>
-                  <label className="mb-2 block text-sm font-bold text-neutral-text">Page Title</label>
+                <label className="admin-field">
+                  <span>Page Title</span>
                   <input
                     value={currentPage.title}
                     onChange={event => {
                       const title = event.target.value
                       setCurrentPage({ ...currentPage, title, slug: isNewPage ? slugify(title) : currentPage.slug })
                     }}
-                    className="w-full rounded-lg border border-neutral-medium-gray px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+                    className="admin-input"
                     placeholder="Classroom Rules"
+                    dir="ltr"
                   />
-                </div>
-                <div>
-                  <label className="mb-2 block text-sm font-bold text-neutral-text">Page URL</label>
+                </label>
+                <label className="admin-field">
+                  <span>Page URL</span>
                   <input
                     value={currentPage.slug}
                     onChange={event => setCurrentPage({ ...currentPage, slug: slugify(event.target.value) })}
                     disabled={!isNewPage}
-                    className="w-full rounded-lg border border-neutral-medium-gray px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-cyan disabled:bg-neutral-off-white disabled:text-neutral-dark-gray"
+                    className="admin-input disabled:bg-neutral-off-white disabled:text-neutral-dark-gray"
                     placeholder="classroom-rules"
+                    dir="ltr"
                   />
-                </div>
+                </label>
               </div>
 
               <div>
-                <div className="mb-2 flex flex-wrap gap-2 rounded-xl border border-neutral-medium-gray bg-neutral-off-white p-2">
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('bold') }} className="rounded-lg bg-white px-3 py-2 text-sm font-black shadow-sm">Bold</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('italic') }} className="rounded-lg bg-white px-3 py-2 text-sm italic shadow-sm">Italic</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('underline') }} className="rounded-lg bg-white px-3 py-2 text-sm underline shadow-sm">Underline</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); formatBlock('h2') }} className="rounded-lg bg-white px-3 py-2 text-sm font-black shadow-sm">Big Heading</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); formatBlock('h3') }} className="rounded-lg bg-white px-3 py-2 text-sm font-bold shadow-sm">Small Heading</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); formatBlock('p') }} className="rounded-lg bg-white px-3 py-2 text-sm shadow-sm">Normal Text</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('fontSize', '2') }} className="rounded-lg bg-white px-3 py-2 text-xs shadow-sm">Small Text</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('fontSize', '4') }} className="rounded-lg bg-white px-3 py-2 text-base shadow-sm">Medium Text</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('fontSize', '6') }} className="rounded-lg bg-white px-3 py-2 text-lg font-bold shadow-sm">Large Text</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('insertUnorderedList') }} className="rounded-lg bg-white px-3 py-2 text-sm shadow-sm">Bullets</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('insertOrderedList') }} className="rounded-lg bg-white px-3 py-2 text-sm shadow-sm">Numbers</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); const url = window.prompt('Paste the link URL'); if (url) runCommand('createLink', url) }} className="rounded-lg bg-white px-3 py-2 text-sm shadow-sm">Link</button>
+                <div className="admin-editor-toolbar" aria-label="Text formatting toolbar">
+                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('bold') }} className="admin-editor-button">Bold</button>
+                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('italic') }} className="admin-editor-button italic">Italic</button>
+                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('underline') }} className="admin-editor-button underline">Underline</button>
+                  <button type="button" onMouseDown={event => { event.preventDefault(); formatBlock('h2') }} className="admin-editor-button">Heading</button>
+                  <button type="button" onMouseDown={event => { event.preventDefault(); formatBlock('p') }} className="admin-editor-button">Normal</button>
+                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('insertUnorderedList') }} className="admin-editor-button">Bullets</button>
+                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('insertOrderedList') }} className="admin-editor-button">Numbers</button>
+                  <button type="button" onMouseDown={event => { event.preventDefault(); insertLink() }} className="admin-editor-button">Link</button>
                 </div>
                 <div
                   ref={editorRef}
                   contentEditable
                   suppressContentEditableWarning
-                  onInput={syncEditorToState}
-                  className="rich-content min-h-[360px] rounded-xl border border-neutral-medium-gray bg-white px-5 py-4 focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+                  dir="ltr"
+                  className="rich-content admin-editor-surface"
+                  aria-label="Page body editor"
                 />
               </div>
 

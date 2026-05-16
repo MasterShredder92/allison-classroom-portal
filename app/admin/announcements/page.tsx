@@ -152,50 +152,54 @@ export default function AnnouncementsPage() {
       )}
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg border border-neutral-medium-gray mb-8 space-y-4">
+        <form onSubmit={handleSubmit} className="admin-doc-card mb-8 space-y-4 p-6">
           <div>
-            <label className="block text-sm font-semibold text-neutral-text mb-2">Title</label>
+            <label className="mb-2 block text-sm font-bold text-neutral-text">Title</label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+              className="admin-input"
               placeholder="Announcement title"
+              dir="ltr"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-neutral-text mb-2">Body</label>
+            <label className="mb-2 block text-sm font-bold text-neutral-text">Body</label>
             <textarea
               value={formData.body}
               onChange={(e) => setFormData({ ...formData, body: e.target.value })}
-              className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan h-40"
+              className="admin-textarea h-40"
               placeholder="What's new in the classroom?"
+              dir="ltr"
               required
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-neutral-text mb-2">Link URL (optional)</label>
+              <label className="mb-2 block text-sm font-bold text-neutral-text">Link URL (optional)</label>
               <input
                 type="url"
                 value={formData.link_url}
                 onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
-                className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+                className="admin-input"
                 placeholder="https://example.com"
+                dir="ltr"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-neutral-text mb-2">Attachment URL (optional)</label>
+              <label className="mb-2 block text-sm font-bold text-neutral-text">Attachment URL (optional)</label>
               <input
                 type="url"
                 value={formData.attachment_url}
                 onChange={(e) => setFormData({ ...formData, attachment_url: e.target.value })}
-                className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan"
+                className="admin-input"
                 placeholder="https://example.com/file.pdf"
+                dir="ltr"
               />
             </div>
           </div>
@@ -247,7 +251,7 @@ export default function AnnouncementsPage() {
       ) : announcements.length > 0 ? (
         <div className="space-y-4">
           {announcements.map(announcement => (
-            <div key={announcement.id} className="bg-white p-6 rounded-lg border border-neutral-medium-gray">
+            <div key={announcement.id} className="admin-doc-card p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
