@@ -38,7 +38,10 @@ export default function LinksPage() {
     try {
       const response = await fetch('/api/links', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('adminToken') || ''}`,
+        },
         body: JSON.stringify({ ...formData, active: true, sort_order: links.length + 1 }),
       })
       if (response.ok) {
@@ -60,7 +63,10 @@ export default function LinksPage() {
     try {
       const response = await fetch('/api/links', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('adminToken') || ''}`,
+        },
         body: JSON.stringify({ id }),
       })
       if (response.ok) {

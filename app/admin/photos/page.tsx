@@ -35,7 +35,10 @@ export default function PhotosPage() {
     try {
       const response = await fetch('/api/photo-updates', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('adminToken') || ''}`,
+        },
         body: JSON.stringify({
           ...formData,
           date: new Date().toISOString().split('T')[0],
@@ -61,7 +64,10 @@ export default function PhotosPage() {
     try {
       const response = await fetch('/api/photo-updates', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('adminToken') || ''}`,
+        },
         body: JSON.stringify({ id }),
       })
       if (response.ok) {

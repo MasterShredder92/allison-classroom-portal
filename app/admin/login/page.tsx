@@ -23,12 +23,19 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       })
 
+      const data = await response.json()
+
       if (!response.ok) {
-        const data = await response.json()
         setError(data.error || 'Login failed')
         return
       }
 
+      if (!data.accessToken) {
+        setError('Login succeeded, but no access token was returned. Please contact support.')
+        return
+      }
+
+      localStorage.setItem('adminToken', data.accessToken)
       router.push('/admin')
     } catch (err) {
       setError('An error occurred. Please try again.')

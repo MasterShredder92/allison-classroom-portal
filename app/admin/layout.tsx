@@ -24,11 +24,22 @@ export default function AdminLayout({
 
     const checkAuth = async () => {
       try {
+        const token = localStorage.getItem('adminToken')
+
+        if (!token) {
+          router.push('/admin/login')
+          return
+        }
+
         const response = await fetch('/api/auth/check', {
           method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
 
         if (!response.ok) {
+          localStorage.removeItem('adminToken')
           router.push('/admin/login')
           return
         }

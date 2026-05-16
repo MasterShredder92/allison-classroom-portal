@@ -55,7 +55,10 @@ export default function AssignmentsPage() {
     try {
       const response = await fetch('/api/assignments', {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('adminToken') || ''}`,
+        },
         body: JSON.stringify({
           ...(editingId && { id: editingId }),
           ...formData,
@@ -84,7 +87,10 @@ export default function AssignmentsPage() {
     try {
       const response = await fetch('/api/assignments', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('adminToken') || ''}`,
+        },
         body: JSON.stringify({ id }),
       })
       if (response.ok) {

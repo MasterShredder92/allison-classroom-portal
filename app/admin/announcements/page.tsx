@@ -52,7 +52,10 @@ export default function AnnouncementsPage() {
     try {
       const response = await fetch(endpoint, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('adminToken') || ''}`,
+        },
         body: JSON.stringify({
           ...(editingId && { id: editingId }),
           ...formData,
@@ -77,7 +80,10 @@ export default function AnnouncementsPage() {
     try {
       const response = await fetch('/api/announcements', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('adminToken') || ''}`,
+        },
         body: JSON.stringify({ id }),
       })
 

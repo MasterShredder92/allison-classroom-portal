@@ -39,7 +39,10 @@ export default function SchedulePage() {
     try {
       const response = await fetch('/api/schedule', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('adminToken') || ''}`,
+        },
         body: JSON.stringify({ ...formData, active: true }),
       })
       if (response.ok) {
