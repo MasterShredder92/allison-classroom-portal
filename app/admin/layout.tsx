@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function AdminLayout({
@@ -10,11 +10,18 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   const router = useRouter()
+  const pathname = usePathname()
+  const isLoginPage = pathname === '/admin/login'
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
+    if (isLoginPage) {
+      setLoading(false)
+      return
+    }
+
     const checkAuth = async () => {
       try {
         const response = await fetch('/api/auth/check', {
@@ -41,7 +48,11 @@ export default function AdminLayout({
     }
 
     checkAuth()
-  }, [router])
+  }, [router, isLoginPage])
+
+  if (isLoginPage) {
+    return <>{children}</>
+  }
 
   if (loading) {
     return (
