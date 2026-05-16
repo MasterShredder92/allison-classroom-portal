@@ -10,6 +10,26 @@ interface PageContent {
   updated_at?: string
 }
 
+const textColors = [
+  { label: 'Black', value: '#2f2a24' },
+  { label: 'Gray', value: '#665f55' },
+  { label: 'Cyan', value: '#008f94' },
+  { label: 'Pink', value: '#c9367f' },
+  { label: 'Purple', value: '#7456c8' },
+  { label: 'Green', value: '#28624f' },
+  { label: 'Red', value: '#b42318' },
+  { label: 'Yellow', value: '#8a5a00' },
+]
+
+const highlightColors = [
+  { label: 'None', value: 'transparent' },
+  { label: 'Yellow', value: '#fff1a8' },
+  { label: 'Pink', value: '#ffd4ea' },
+  { label: 'Cyan', value: '#c8fbff' },
+  { label: 'Lavender', value: '#e3ddff' },
+  { label: 'Green', value: '#dff8e8' },
+]
+
 async function getApiError(response: Response, fallback: string) {
   try {
     const payload = await response.json()
@@ -45,6 +65,7 @@ function emptyPage(): PageContent {
 export default function AdminPagesPage() {
   const editorRef = useRef<HTMLDivElement | null>(null)
   const loadedEditorKeyRef = useRef<string>('')
+  const savedRangeRef = useRef<Range | null>(null)
   const [pages, setPages] = useState<PageContent[]>([])
   const [selectedSlug, setSelectedSlug] = useState('about')
   const [currentPage, setCurrentPage] = useState<PageContent | null>(null)
@@ -62,12 +83,36 @@ export default function AdminPagesPage() {
     Authorization: `Bearer ${localStorage.getItem('adminToken') || ''}`,
   })
 
+  const saveSelection = () => {
+    const editor = editorRef.current
+    const selection = window.getSelection()
+    if (!editor || !selection || selection.rangeCount === 0) return
+    const range = selection.getRangeAt(0)
+    if (editor.contains(range.commonAncestorContainer)) {
+      savedRangeRef.current = range.cloneRange()
+    }
+  }
+
+  const restoreSelection = () => {
+    const editor = editorRef.current
+    const selection = window.getSelection()
+    if (!editor || !selection || !savedRangeRef.current) {
+      editor?.focus()
+      return
+    }
+    editor.focus()
+    selection.removeAllRanges()
+    selection.addRange(savedRangeRef.current)
+  }
+
   const loadEditorHtml = (page: PageContent | null, force = false) => {
     if (!editorRef.current || !page) return
     const key = `${page.id || page.slug || 'new'}:${page.updated_at || ''}:${isNewPage ? 'new' : 'saved'}`
     if (!force && loadedEditorKeyRef.current === key) return
     editorRef.current.innerHTML = page.body_markdown || '<p></p>'
     editorRef.current.setAttribute('dir', 'ltr')
+    editorRef.current.style.color = '#2f2a24'
+    editorRef.current.style.backgroundColor = '#ffffff'
     loadedEditorKeyRef.current = key
   }
 
@@ -129,6 +174,7 @@ export default function AdminPagesPage() {
     setSuccess(null)
     const page = emptyPage()
     loadedEditorKeyRef.current = ''
+    savedRangeRef.current = null
     setCurrentPage(page)
     setSelectedSlug('')
     setIsNewPage(true)
@@ -136,16 +182,19 @@ export default function AdminPagesPage() {
   }
 
   const runCommand = (command: string, value?: string) => {
-    editorRef.current?.focus()
+    restoreSelection()
     document.execCommand(command, false, value)
+    saveSelection()
   }
 
   const formatBlock = (tag: string) => {
-    editorRef.current?.focus()
+    restoreSelection()
     document.execCommand('formatBlock', false, tag)
+    saveSelection()
   }
 
   const insertLink = () => {
+    restoreSelection()
     const url = window.prompt('Paste the link URL')
     if (!url) return
     runCommand('createLink', url)
@@ -244,9 +293,9 @@ export default function AdminPagesPage() {
     <div dir="ltr">
       <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="admin-kicker">Word-style editor</p>
+          <p className="admin-kicker">Google Docs-style editor</p>
           <h1 className="font-serif text-4xl font-black text-neutral-text">Edit Site Pages</h1>
-          <p className="admin-muted">Simple document editing: type normally, use basic formatting, save, and the public site updates immediately.</p>
+          <p className="admin-muted">Black text on a white page, normal typing, simple formatting, color controls, and instant public updates after saving.</p>
         </div>
         <button type="button" onClick={startNewPage} className="rounded-xl bg-accent-cyan px-5 py-3 font-black text-white hover:opacity-90">
           Add New Page
@@ -305,24 +354,69 @@ export default function AdminPagesPage() {
                 </label>
               </div>
 
-              <div>
+              <div className="admin-editor-frame">
                 <div className="admin-editor-toolbar" aria-label="Text formatting toolbar">
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('bold') }} className="admin-editor-button">Bold</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('italic') }} className="admin-editor-button italic">Italic</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('underline') }} className="admin-editor-button underline">Underline</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); formatBlock('h2') }} className="admin-editor-button">Heading</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); formatBlock('p') }} className="admin-editor-button">Normal</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('insertUnorderedList') }} className="admin-editor-button">Bullets</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('insertOrderedList') }} className="admin-editor-button">Numbers</button>
-                  <button type="button" onMouseDown={event => { event.preventDefault(); insertLink() }} className="admin-editor-button">Link</button>
+                  <div className="admin-toolbar-group" aria-label="Text style">
+                    <button type="button" onMouseDown={event => { event.preventDefault(); formatBlock('p') }} className="admin-editor-button">Normal</button>
+                    <button type="button" onMouseDown={event => { event.preventDefault(); formatBlock('h2') }} className="admin-editor-button">Title</button>
+                    <button type="button" onMouseDown={event => { event.preventDefault(); formatBlock('h3') }} className="admin-editor-button">Subhead</button>
+                  </div>
+
+                  <div className="admin-toolbar-group" aria-label="Basic formatting">
+                    <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('bold') }} className="admin-editor-button font-black">B</button>
+                    <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('italic') }} className="admin-editor-button italic">I</button>
+                    <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('underline') }} className="admin-editor-button underline">U</button>
+                  </div>
+
+                  <div className="admin-toolbar-group" aria-label="Alignment">
+                    <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('justifyLeft') }} className="admin-editor-button">Left</button>
+                    <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('justifyCenter') }} className="admin-editor-button">Center</button>
+                    <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('justifyRight') }} className="admin-editor-button">Right</button>
+                  </div>
+
+                  <div className="admin-toolbar-group" aria-label="Lists and links">
+                    <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('insertUnorderedList') }} className="admin-editor-button">Bullets</button>
+                    <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('insertOrderedList') }} className="admin-editor-button">Numbers</button>
+                    <button type="button" onMouseDown={event => { event.preventDefault(); insertLink() }} className="admin-editor-button">Link</button>
+                    <button type="button" onMouseDown={event => { event.preventDefault(); runCommand('removeFormat') }} className="admin-editor-button">Clear</button>
+                  </div>
+
+                  <label className="admin-color-control" onMouseDown={saveSelection}>
+                    <span>Text</span>
+                    <select
+                      defaultValue="#2f2a24"
+                      onFocus={saveSelection}
+                      onChange={event => runCommand('foreColor', event.target.value)}
+                      className="admin-color-select"
+                    >
+                      {textColors.map(color => <option key={color.value} value={color.value}>{color.label}</option>)}
+                    </select>
+                  </label>
+
+                  <label className="admin-color-control" onMouseDown={saveSelection}>
+                    <span>Highlight</span>
+                    <select
+                      defaultValue="transparent"
+                      onFocus={saveSelection}
+                      onChange={event => runCommand('hiliteColor', event.target.value)}
+                      className="admin-color-select"
+                    >
+                      {highlightColors.map(color => <option key={color.value} value={color.value}>{color.label}</option>)}
+                    </select>
+                  </label>
                 </div>
                 <div
                   ref={editorRef}
                   contentEditable
                   suppressContentEditableWarning
                   dir="ltr"
-                  className="rich-content admin-editor-surface"
+                  className="admin-editor-surface admin-page-editor-surface"
                   aria-label="Page body editor"
+                  onMouseUp={saveSelection}
+                  onKeyUp={saveSelection}
+                  onFocus={saveSelection}
+                  onInput={saveSelection}
+                  spellCheck
                 />
               </div>
 
