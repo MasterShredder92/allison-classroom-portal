@@ -48,6 +48,7 @@ export default function GlobalHeader() {
           <Link href="/links" className="rounded-full px-4 py-2 text-sm font-bold text-neutral-dark-gray hover:bg-accent-cyan/20 hover:text-neutral-text transition-colors">Links</Link>
           <Link href="/schedule" className="rounded-full px-4 py-2 text-sm font-bold text-neutral-dark-gray hover:bg-accent-lavender/45 hover:text-neutral-text transition-colors">Schedule</Link>
           <Link href="/whats-happening" className="rounded-full px-4 py-2 text-sm font-bold text-neutral-dark-gray hover:bg-accent-purple/35 hover:text-neutral-text transition-colors">What&apos;s Happening</Link>
+          <Link href="/admin/login" className="rounded-full border border-neutral-medium-gray/80 bg-white px-4 py-2 text-sm font-black text-neutral-text shadow-sm hover:border-accent-cyan hover:bg-accent-cyan/10 transition-colors">Teacher Login</Link>
         </div>
 
         <button onClick={() => setMenuOpen(!menuOpen)} className="focus-ring lg:hidden rounded-2xl border border-neutral-medium-gray/70 bg-white/80 p-3 shadow-sm" aria-label="Toggle navigation menu">
@@ -69,6 +70,7 @@ export default function GlobalHeader() {
             <Link href="/links" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-bold hover:bg-neutral-off-white">Links</Link>
             <Link href="/schedule" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-bold hover:bg-neutral-off-white">Schedule</Link>
             <Link href="/whats-happening" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-bold hover:bg-neutral-off-white">What&apos;s Happening</Link>
+            <Link href="/admin/login" onClick={() => setMenuOpen(false)} className="block rounded-2xl border border-neutral-medium-gray/80 bg-accent-cyan/10 px-4 py-3 font-black text-neutral-text hover:bg-accent-cyan/20">Teacher Login</Link>
           </div>
         </div>
       )}
