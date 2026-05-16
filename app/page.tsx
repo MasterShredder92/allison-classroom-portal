@@ -83,8 +83,8 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="classroom-shell py-8 sm:py-12">
-      <section className="relative overflow-hidden rounded-[2.5rem] border-2 border-neutral-text/10 bg-white/72 p-5 shadow-[0_30px_90px_rgba(65,47,25,0.16)] backdrop-blur-xl sm:p-8 lg:p-10">
+    <div className="classroom-shell home-polish py-8 sm:py-12">
+      <section className="home-hero-gloss relative overflow-hidden rounded-[2.5rem] border-2 border-neutral-text/10 bg-white/72 p-5 shadow-[0_30px_90px_rgba(65,47,25,0.16)] backdrop-blur-xl sm:p-8 lg:p-10">
         <div className="absolute inset-x-0 top-0 h-3 bg-gradient-to-r from-accent-pink via-accent-yellow via-accent-cyan via-accent-sky-blue to-accent-purple" />
         <span className="sticker-dot left-8 top-20 h-10 w-10 bg-accent-yellow/70 floaty" style={{ '--rotate': '9deg' } as CSSProperties} />
         <span className="sticker-dot bottom-8 right-16 h-14 w-14 bg-accent-pink/35 floaty-slow" style={{ '--rotate': '-7deg' } as CSSProperties} />
@@ -142,8 +142,8 @@ export default function Home() {
       <section className="mt-10">
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>
-            <span className="section-eyebrow">Quick Access</span>
-            <h2 className="mt-3 font-serif text-4xl font-black text-neutral-text">Family shortcuts</h2>
+            <span className="section-eyebrow home-black-label">Quick Access</span>
+            <h2 className="home-black-label mt-3 font-serif text-4xl font-black text-neutral-text">Family shortcuts</h2>
           </div>
         </div>
         <QuickLinkBar />
@@ -177,8 +177,8 @@ export default function Home() {
       <section id="classes" className="mt-12">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <span className="section-eyebrow">Classrooms</span>
-            <h2 className="mt-3 font-serif text-5xl font-black leading-none text-neutral-text">Choose a class</h2>
+            <span className="section-eyebrow home-black-label">Classrooms</span>
+            <h2 className="home-black-label mt-3 font-serif text-5xl font-black leading-none text-neutral-text">Choose a class</h2>
           </div>
           <p className="max-w-xl text-sm font-bold leading-6 text-neutral-dark-gray">Each class page keeps families focused on the assignments and resources that match the student’s schedule.</p>
         </div>

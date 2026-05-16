@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import ResourcePreview from './ResourcePreview'
 
 interface Announcement {
   id: string
@@ -29,13 +30,13 @@ export default function AnnouncementCard({ announcement }: { announcement: Annou
           <h3 className="font-serif text-2xl font-black leading-tight text-neutral-text transition-colors group-hover:text-accent-cyan">{announcement.title}</h3>
           <p className="mt-3 line-clamp-3 text-sm font-bold leading-6 text-neutral-dark-gray">{announcement.body}</p>
         </div>
-        {(announcement.attachment_url || announcement.link_url) && (
-          <div className="flex shrink-0 flex-wrap gap-2 sm:flex-col sm:items-end">
-            {announcement.attachment_url && <a href={announcement.attachment_url} target="_blank" rel="noopener noreferrer" className="fun-button rounded-full border-2 border-neutral-medium-gray bg-white px-4 py-2 text-xs font-black text-neutral-text shadow-sm">Attachment</a>}
-            {announcement.link_url && <a href={announcement.link_url} target="_blank" rel="noopener noreferrer" className="fun-button rounded-full bg-accent-cyan px-4 py-2 text-xs font-black text-white shadow-sm">Open link →</a>}
-          </div>
-        )}
       </div>
+      {(announcement.attachment_url || announcement.link_url) && (
+        <div className="relative z-10 mt-5 grid gap-4 lg:grid-cols-2">
+          {announcement.attachment_url && <ResourcePreview url={announcement.attachment_url} title={`${announcement.title} attachment`} compact />}
+          {announcement.link_url && <ResourcePreview url={announcement.link_url} title={announcement.title} compact />}
+        </div>
+      )}
     </article>
   )
 }

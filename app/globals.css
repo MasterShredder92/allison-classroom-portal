@@ -829,3 +829,206 @@ main [contenteditable='true'] {
     justify-content: space-between;
   }
 }
+
+/* Public inline resource previews: Google Drive/Docs/Sheets/Slides, YouTube, images, PDFs, and calendars. */
+.resource-preview {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.36);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 18px 40px rgba(12, 34, 32, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(12px);
+}
+
+.resource-preview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: 0.65rem 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+  background: linear-gradient(90deg, rgba(255, 224, 141, 0.22), rgba(105, 220, 241, 0.16));
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.resource-preview-bar span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 0.28rem 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.resource-preview-bar span::before {
+  content: "✦";
+  color: #ffe08d;
+}
+
+.resource-preview-bar a {
+  color: #ffffff !important;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 224, 141, 0.75);
+  text-underline-offset: 0.18em;
+}
+
+.resource-preview-frame {
+  display: block;
+  width: 100%;
+  height: clamp(320px, 55vh, 620px);
+  border: 0;
+  background: #ffffff;
+}
+
+.resource-preview-compact .resource-preview-frame {
+  height: clamp(240px, 38vh, 420px);
+}
+
+.resource-preview-image {
+  display: block;
+  width: 100%;
+  max-height: 560px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.resource-preview-compact .resource-preview-image {
+  max-height: 360px;
+}
+
+.resource-preview-link {
+  display: flex;
+  min-height: 6rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  color: #ffffff !important;
+  font-weight: 900;
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 224, 141, 0.78);
+  text-underline-offset: 0.22em;
+}
+
+@media (max-width: 640px) {
+  .resource-preview {
+    border-radius: 1rem;
+  }
+
+  .resource-preview-bar {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 0.7rem;
+  }
+
+  .resource-preview-frame {
+    height: 430px;
+  }
+
+  .resource-preview-compact .resource-preview-frame {
+    height: 300px;
+  }
+}
+
+/* Homepage polish: warm off-white canvas, glossy floating cards, required black labels, and playful shortcut arrows. */
+.home-polish {
+  position: relative;
+}
+
+.home-polish::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 224, 141, 0.18), transparent 18rem),
+    radial-gradient(circle at 88% 18%, rgba(255, 190, 210, 0.18), transparent 18rem),
+    linear-gradient(135deg, #fff8ed 0%, #fffdf6 48%, #f6fbff 100%);
+}
+
+.home-hero-gloss,
+.home-polish .paper-card,
+.home-polish .bulletin-card,
+.home-polish .empty-state {
+  box-shadow:
+    0 30px 90px rgba(18, 45, 43, 0.24),
+    0 12px 24px rgba(255, 137, 198, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.26) !important;
+}
+
+.home-hero-gloss::before,
+.home-polish .paper-card::before,
+.home-polish .bulletin-card::after {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.30), transparent 28%),
+    radial-gradient(circle at 18% 10%, rgba(255,255,255,0.22), transparent 9rem) !important;
+}
+
+.home-black-label,
+.home-black-label *,
+.classroom-shell .home-black-label,
+.classroom-shell .home-black-label * {
+  color: #111111 !important;
+  text-shadow: none !important;
+}
+
+.classroom-shell .section-eyebrow.home-black-label {
+  border-color: rgba(17, 17, 17, 0.18) !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  box-shadow: 0 10px 26px rgba(65, 47, 25, 0.12) !important;
+}
+
+.classroom-shell .section-eyebrow.home-black-label::before {
+  color: #ff4faa !important;
+}
+
+.quick-arrow-badge {
+  display: inline-grid;
+  min-width: 2.4rem;
+  place-items: center;
+  border: 2px solid rgba(17, 17, 17, 0.16);
+  background: linear-gradient(135deg, #111111 0%, #2f2a24 42%, #ff89c6 100%);
+  color: #ffffff !important;
+  box-shadow: 0 10px 24px rgba(12, 34, 32, 0.24), inset 0 1px 0 rgba(255,255,255,0.25);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.22);
+}
+
+@media (max-width: 768px) {
+  .classroom-shell {
+    width: min(100% - 1rem, 1180px);
+  }
+
+  .home-polish {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+  .home-hero-gloss,
+  .home-polish .paper-card,
+  .home-polish .bulletin-card,
+  .home-polish .empty-state {
+    border-radius: 1.45rem !important;
+  }
+
+  .home-polish .section-eyebrow {
+    font-size: 0.68rem;
+  }
+
+  .home-polish h1 {
+    letter-spacing: -0.045em;
+  }
+
+  .home-polish h2 {
+    font-size: clamp(2.1rem, 12vw, 3rem);
+  }
+
+  .home-polish .pop-card:hover {
+    transform: translateY(-3px) rotate(var(--tilt, -0.4deg));
+  }
+}

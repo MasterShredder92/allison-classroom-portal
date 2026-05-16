@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import AdminQuickResourcePost from '@/components/AdminQuickResourcePost'
 
 interface Announcement {
   id: string
@@ -145,6 +146,9 @@ export default function AnnouncementsPage() {
         </button>
       </div>
 
+      <div className="mb-8">
+        <AdminQuickResourcePost compact />
+      </div>
       {error && (
         <div role="alert" className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800">
           {error}

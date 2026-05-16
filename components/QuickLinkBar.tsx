@@ -16,7 +16,7 @@ export default function QuickLinkBar() {
           <div className="relative z-10 flex min-h-32 flex-col justify-between gap-5">
             <div className="flex items-start justify-between gap-4">
               <div className="grid h-14 w-14 place-items-center rounded-[1.25rem] bg-white text-3xl shadow-sm transition-transform duration-200 group-hover:rotate-6 group-hover:scale-110">{link.icon}</div>
-              <span className="rounded-full bg-white/82 px-3 py-1 text-sm font-black text-neutral-text transition-transform group-hover:translate-x-1">→</span>
+              <span className="quick-arrow-badge rounded-full px-3.5 py-2 text-base font-black transition-transform group-hover:translate-x-1 group-hover:-rotate-6">→</span>
             </div>
             <div>
               <p className="font-serif text-2xl font-black leading-none text-neutral-text">{link.title}</p>

@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import ResourcePreview from './ResourcePreview'
 
 interface Assignment {
   id: string
@@ -38,7 +39,11 @@ export default function AssignmentCard({ assignment }: { assignment: Assignment 
           {isDueToday && <span className="rounded-full bg-accent-pink px-3 py-1 text-xs font-black text-white">Today</span>}
           {isOverdue && <span className="rounded-full bg-neutral-medium-gray px-3 py-1 text-xs font-black text-neutral-dark-gray">Past Due</span>}
         </div>
-        {(assignment.resource_url || assignment.file_url) && <a href={assignment.resource_url || assignment.file_url} target="_blank" rel="noopener noreferrer" className="fun-button mt-5 rounded-full bg-accent-cyan px-4 py-2 text-sm font-black text-white shadow-sm">Open resource →</a>}
+        {(assignment.resource_url || assignment.file_url) && (
+          <div className="mt-5">
+            <ResourcePreview url={assignment.resource_url || assignment.file_url} title={assignment.title} compact />
+          </div>
+        )}
       </div>
     </article>
   )
