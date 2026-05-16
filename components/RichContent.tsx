@@ -1,28 +1,13 @@
-"use client"
-
-import { useMemo } from 'react'
-
 interface RichContentProps {
   html?: string | null
   className?: string
 }
 
 function sanitizeHtml(html: string) {
-  if (typeof window === 'undefined') return html
-
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(html, 'text/html')
-
-  doc.querySelectorAll('script, iframe, object, embed, form, input, button').forEach(node => node.remove())
-  doc.querySelectorAll('*').forEach(node => {
-    Array.from(node.attributes).forEach(attribute => {
-      const name = attribute.name.toLowerCase()
-      const value = attribute.value.toLowerCase()
-      if (name.startsWith('on') || value.includes('javascript:')) node.removeAttribute(attribute.name)
-    })
-  })
-
-  return doc.body.innerHTML
+  return html
+    .replace(/<\/?(script|iframe|object|embed|form|input|button)[^>]*>/gi, '')
+    .replace(/\son\w+=("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+    .replace(/javascript:/gi, '')
 }
 
 function markdownFallbackToHtml(content: string) {
@@ -42,7 +27,7 @@ function markdownFallbackToHtml(content: string) {
 }
 
 export default function RichContent({ html, className = '' }: RichContentProps) {
-  const safeHtml = useMemo(() => sanitizeHtml(markdownFallbackToHtml(html || '')), [html])
+  const safeHtml = sanitizeHtml(markdownFallbackToHtml(html || ''))
 
   if (!safeHtml) return null
 

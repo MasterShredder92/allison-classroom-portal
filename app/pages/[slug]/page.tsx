@@ -1,55 +1,36 @@
-"use client"
-
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import RichContent from '@/components/RichContent'
+import { createPublicSupabaseClient } from '@/lib/supabase/server'
 
 interface PageContent {
   slug: string
   title: string
-  body_markdown?: string
+  body_markdown?: string | null
 }
 
-export default function CustomPage() {
-  const params = useParams<{ slug: string }>()
-  const slug = params.slug
-  const [page, setPage] = useState<PageContent | null>(null)
-  const [loading, setLoading] = useState(true)
+type PageProps = {
+  params: Promise<{ slug: string }>
+}
 
-  useEffect(() => {
-    if (!slug) return
+async function getPage(slug: string): Promise<PageContent | null> {
+  const supabase = createPublicSupabaseClient()
+  const { data, error } = await supabase
+    .from('page_content')
+    .select('slug,title,body_markdown')
+    .eq('slug', slug)
+    .single()
 
-    fetch(`/api/page-content/${slug}`)
-      .then(async res => {
-        if (!res.ok) return null
-        const payload = await res.json()
-        return payload.data as PageContent
-      })
-      .then(setPage)
-      .catch(error => console.error('Error loading custom page:', error))
-      .finally(() => setLoading(false))
-  }, [slug])
+  if (error?.code === 'PGRST116') return null
+  if (error) throw error
+  return data
+}
 
-  if (loading) {
-    return (
-      <div className="classroom-shell py-10 sm:py-14">
-        <div className="h-72 animate-pulse rounded-[2rem] bg-white/80" />
-      </div>
-    )
-  }
+export default async function CustomPage({ params }: PageProps) {
+  const { slug } = await params
+  const page = await getPage(slug)
 
-  if (!page) {
-    return (
-      <div className="classroom-shell py-10 sm:py-14">
-        <section className="empty-state rounded-[2rem] p-10 text-center">
-          <h1 className="font-serif text-4xl font-black text-neutral-text">Page not found</h1>
-          <p className="mx-auto mt-3 max-w-xl leading-7 text-neutral-dark-gray">This page may have been removed by the teacher.</p>
-          <Link href="/" className="mt-6 inline-flex rounded-xl bg-accent-cyan px-5 py-3 font-black text-white hover:opacity-90">Back to Home</Link>
-        </section>
-      </div>
-    )
-  }
+  if (!page) notFound()
 
   return (
     <div className="classroom-shell py-10 sm:py-14">
@@ -63,6 +44,10 @@ export default function CustomPage() {
       <section className="mt-8 rounded-[2rem] border border-neutral-medium-gray/70 bg-white p-8 shadow-sm sm:p-10">
         <RichContent html={page.body_markdown} />
       </section>
+
+      <Link href="/" className="mt-8 inline-flex rounded-xl bg-accent-cyan px-5 py-3 font-black text-white hover:opacity-90">
+        Back to Home
+      </Link>
     </div>
   )
 }
