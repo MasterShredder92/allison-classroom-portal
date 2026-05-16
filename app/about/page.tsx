@@ -29,10 +29,10 @@ export default function AboutPage() {
       <section className="paper-card notebook-lines rounded-[2rem] p-8 sm:p-10">
         <div className="relative z-10 max-w-3xl">
           <span className="section-eyebrow">About the Classroom</span>
-          <h1 className="mt-4 font-serif text-5xl font-black tracking-tight text-neutral-text">
+          <h1 className="mt-4 font-serif text-5xl font-black leading-none tracking-tight text-neutral-text sm:text-6xl">
             {page?.title || 'About Allison\'s Classroom'}
           </h1>
-          <p className="mt-4 text-lg leading-8 text-neutral-dark-gray">
+          <p className="mt-4 text-lg font-bold leading-8 text-neutral-dark-gray">
             Classroom details, expectations, and teacher notes for families.
           </p>
         </div>

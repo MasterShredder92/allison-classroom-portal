@@ -15,16 +15,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="text-neutral-text font-sans antialiased min-h-screen flex flex-col">
-        <div className="rainbow-strip" />
+      <body className="flex min-h-screen flex-col font-sans text-neutral-text antialiased">
+        <div className="rainbow-strip relative z-20" />
         <GlobalHeader />
         <main className="relative z-10 flex-1">{children}</main>
-        <footer className="relative z-10 mt-20 border-t border-neutral-medium-gray/70 bg-white/65 backdrop-blur">
-          <div className="classroom-shell py-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-sm text-neutral-dark-gray">
-            <p className="font-semibold text-neutral-text">© 2026 Allison&apos;s Classroom</p>
-            <div className="flex flex-col gap-2 sm:items-end">
-              <p>Built for clear parent communication, assignments, schedules, and classroom updates.</p>
-              <Link href="/admin/login" className="font-bold text-neutral-text underline decoration-accent-cyan/60 underline-offset-4 hover:text-accent-cyan">Teacher Login</Link>
+        <footer className="relative z-10 mt-20 border-t-2 border-neutral-medium-gray/60 bg-white/70 backdrop-blur-xl">
+          <div className="classroom-shell py-8">
+            <div className="paper-card flex flex-col gap-5 rounded-[2rem] p-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="relative z-10">
+                <p className="font-serif text-2xl font-black text-neutral-text">© 2026 Allison&apos;s Classroom</p>
+                <p className="mt-1 max-w-2xl text-sm font-bold leading-6 text-neutral-dark-gray">Built for clear parent communication, assignments, schedules, and classroom updates.</p>
+              </div>
+              <Link href="/admin/login" className="fun-button relative z-10 rounded-full bg-neutral-text px-5 py-3 text-sm font-black text-white shadow-lg hover:bg-accent-cyan">Teacher Login</Link>
             </div>
           </div>
         </footer>

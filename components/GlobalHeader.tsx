@@ -39,84 +39,85 @@ export default function GlobalHeader() {
   }, [])
 
   return (
-    <header className="relative z-50 sticky top-0 border-b border-neutral-medium-gray/70 bg-white/78 shadow-[0_8px_26px_rgba(65,47,25,0.08)] backdrop-blur-xl">
-      <nav className="classroom-shell h-20 flex items-center justify-between">
-        <Link href="/" className="focus-ring group flex items-center gap-3 rounded-2xl">
-          <div className="relative h-12 w-12 rounded-2xl bg-accent-cyan shadow-lg shadow-cyan-200/70 grid place-items-center rotate-[-3deg] group-hover:rotate-0 transition-transform">
-            <span className="absolute -right-1 -top-1 h-4 w-4 rounded-full bg-accent-pink border-2 border-white" />
-            <span className="font-serif text-white font-bold text-2xl">A</span>
+    <header className="sticky top-0 z-50 border-b-2 border-neutral-medium-gray/60 bg-white/72 shadow-[0_14px_34px_rgba(65,47,25,0.10)] backdrop-blur-2xl">
+      <nav className="classroom-shell flex min-h-20 items-center justify-between gap-4 py-3">
+        <Link href="/" className="focus-ring group flex items-center gap-3 rounded-[1.35rem]">
+          <div className="relative grid h-14 w-14 place-items-center rounded-[1.35rem] bg-accent-cyan shadow-lg shadow-cyan-200/70 transition-transform duration-200 group-hover:-rotate-3 group-hover:scale-105">
+            <span className="absolute -left-1 -top-1 h-5 w-5 rounded-full border-2 border-white bg-accent-yellow" />
+            <span className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full border-2 border-white bg-accent-pink" />
+            <span className="font-serif text-3xl font-black leading-none text-white drop-shadow-sm">A</span>
           </div>
-          <div className="hidden sm:block leading-tight">
-            <p className="font-serif text-xl font-bold text-neutral-text">Allison&apos;s Classroom</p>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-dark-gray">Wilmot 5th &amp; 6th Grade</p>
+          <div className="hidden leading-tight sm:block">
+            <p className="font-serif text-2xl font-black tracking-tight text-neutral-text">Allison&apos;s Classroom</p>
+            <p className="text-[0.66rem] font-black uppercase tracking-[0.20em] text-neutral-dark-gray">Wilmot 5th &amp; 6th Grade</p>
           </div>
         </Link>
 
-        <div className="hidden lg:flex items-center gap-1 rounded-full border border-neutral-medium-gray/70 bg-white/70 p-1 shadow-sm">
-          <Link href="/about" className="rounded-full px-4 py-2 text-sm font-bold text-neutral-dark-gray hover:bg-accent-light-pink/45 hover:text-neutral-text transition-colors">About</Link>
-          <Link href="/news" className="rounded-full px-4 py-2 text-sm font-bold text-neutral-dark-gray hover:bg-accent-yellow/55 hover:text-neutral-text transition-colors">News</Link>
-          <div className="relative group">
-            <button className="rounded-full px-4 py-2 text-sm font-bold text-neutral-dark-gray hover:bg-accent-sky-blue/45 hover:text-neutral-text transition-colors flex items-center gap-1">
+        <div className="hidden items-center gap-1 rounded-full border-2 border-neutral-medium-gray/60 bg-white/76 p-1.5 shadow-sm lg:flex">
+          <Link href="/about" className="rounded-full px-4 py-2 text-sm font-black text-neutral-dark-gray transition-all hover:-translate-y-0.5 hover:bg-accent-light-pink/50 hover:text-neutral-text">About</Link>
+          <Link href="/news" className="rounded-full px-4 py-2 text-sm font-black text-neutral-dark-gray transition-all hover:-translate-y-0.5 hover:bg-accent-yellow/60 hover:text-neutral-text">News</Link>
+          <div className="group relative">
+            <button className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-black text-neutral-dark-gray transition-all hover:-translate-y-0.5 hover:bg-accent-sky-blue/45 hover:text-neutral-text">
               Classes
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m6 9 6 6 6-6" /></svg>
+              <svg className="h-4 w-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="m6 9 6 6 6-6" /></svg>
             </button>
-            <div className="absolute left-0 top-full mt-3 w-64 rounded-3xl border border-neutral-medium-gray/70 bg-white/95 p-2 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+            <div className="invisible absolute left-0 top-full mt-4 w-72 translate-y-2 rounded-[1.6rem] border-2 border-neutral-medium-gray/70 bg-white/96 p-2.5 opacity-0 shadow-2xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
               {classes.map((cls, index) => (
-                <Link key={cls.slug} href={`/classes/${cls.slug}`} className="block rounded-2xl px-4 py-3 text-sm font-bold text-neutral-text hover:bg-neutral-off-white hover:text-accent-cyan transition-colors">
-                  <span className="mr-2 text-xs text-neutral-dark-gray">0{index + 1}</span>{cls.name}
+                <Link key={cls.slug} href={`/classes/${cls.slug}`} className="group/item flex items-center gap-3 rounded-[1.1rem] px-4 py-3 text-sm font-black text-neutral-text transition-colors hover:bg-neutral-off-white hover:text-accent-cyan">
+                  <span className="grid h-7 w-7 place-items-center rounded-full bg-accent-yellow/70 text-[0.68rem] text-neutral-text transition-transform group-hover/item:rotate-6">0{index + 1}</span>{cls.name}
                 </Link>
               ))}
             </div>
           </div>
           {sitePages.length > 0 && (
-            <div className="relative group">
-              <button className="rounded-full px-4 py-2 text-sm font-bold text-neutral-dark-gray hover:bg-accent-light-pink/45 hover:text-neutral-text transition-colors flex items-center gap-1">
+            <div className="group relative">
+              <button className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-black text-neutral-dark-gray transition-all hover:-translate-y-0.5 hover:bg-accent-light-pink/45 hover:text-neutral-text">
                 Pages
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m6 9 6 6 6-6" /></svg>
+                <svg className="h-4 w-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="m6 9 6 6 6-6" /></svg>
               </button>
-              <div className="absolute left-0 top-full mt-3 w-64 rounded-3xl border border-neutral-medium-gray/70 bg-white/95 p-2 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+              <div className="invisible absolute left-0 top-full mt-4 w-72 translate-y-2 rounded-[1.6rem] border-2 border-neutral-medium-gray/70 bg-white/96 p-2.5 opacity-0 shadow-2xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                 {sitePages.map(page => (
-                  <Link key={page.slug} href={pageHref(page)} className="block rounded-2xl px-4 py-3 text-sm font-bold text-neutral-text hover:bg-neutral-off-white hover:text-accent-cyan transition-colors">
+                  <Link key={page.slug} href={pageHref(page)} className="block rounded-[1.1rem] px-4 py-3 text-sm font-black text-neutral-text transition-colors hover:bg-neutral-off-white hover:text-accent-cyan">
                     {page.title}
                   </Link>
                 ))}
               </div>
             </div>
           )}
-          <Link href="/links" className="rounded-full px-4 py-2 text-sm font-bold text-neutral-dark-gray hover:bg-accent-cyan/20 hover:text-neutral-text transition-colors">Links</Link>
-          <Link href="/schedule" className="rounded-full px-4 py-2 text-sm font-bold text-neutral-dark-gray hover:bg-accent-lavender/45 hover:text-neutral-text transition-colors">Schedule</Link>
-          <Link href="/whats-happening" className="rounded-full px-4 py-2 text-sm font-bold text-neutral-dark-gray hover:bg-accent-purple/35 hover:text-neutral-text transition-colors">What&apos;s Happening</Link>
-          <Link href="/admin/login" className="rounded-full border border-neutral-medium-gray/80 bg-white px-4 py-2 text-sm font-black text-neutral-text shadow-sm hover:border-accent-cyan hover:bg-accent-cyan/10 transition-colors">Teacher Login</Link>
+          <Link href="/links" className="rounded-full px-4 py-2 text-sm font-black text-neutral-dark-gray transition-all hover:-translate-y-0.5 hover:bg-accent-cyan/20 hover:text-neutral-text">Links</Link>
+          <Link href="/schedule" className="rounded-full px-4 py-2 text-sm font-black text-neutral-dark-gray transition-all hover:-translate-y-0.5 hover:bg-accent-lavender/45 hover:text-neutral-text">Schedule</Link>
+          <Link href="/whats-happening" className="rounded-full px-4 py-2 text-sm font-black text-neutral-dark-gray transition-all hover:-translate-y-0.5 hover:bg-accent-purple/35 hover:text-neutral-text">What&apos;s Happening</Link>
+          <Link href="/admin/login" className="fun-button rounded-full border-2 border-neutral-text/10 bg-neutral-text px-4 py-2 text-sm font-black text-white shadow-sm hover:bg-accent-cyan">Teacher Login</Link>
         </div>
 
-        <button onClick={() => setMenuOpen(!menuOpen)} className="focus-ring lg:hidden rounded-2xl border border-neutral-medium-gray/70 bg-white/80 p-3 shadow-sm" aria-label="Toggle navigation menu">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {menuOpen ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18 18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7h16M4 12h16M4 17h16" />}
+        <button onClick={() => setMenuOpen(!menuOpen)} className="focus-ring lg:hidden rounded-[1.2rem] border-2 border-neutral-medium-gray/70 bg-white/86 p-3 shadow-sm transition hover:-translate-y-0.5" aria-label="Toggle navigation menu">
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {menuOpen ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18 18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 7h16M4 12h16M4 17h16" />}
           </svg>
         </button>
       </nav>
 
       {menuOpen && (
-        <div className="lg:hidden border-t border-neutral-medium-gray/70 bg-white/95 backdrop-blur-xl">
-          <div className="classroom-shell py-4 space-y-2">
-            <Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-bold hover:bg-neutral-off-white">About</Link>
-            <Link href="/news" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-bold hover:bg-neutral-off-white">News</Link>
-            <button onClick={() => setClassesOpen(!classesOpen)} className="w-full rounded-2xl px-4 py-3 text-left font-bold hover:bg-neutral-off-white flex items-center justify-between">
+        <div className="border-t-2 border-neutral-medium-gray/60 bg-white/96 backdrop-blur-xl lg:hidden">
+          <div className="classroom-shell space-y-2 py-4">
+            <Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-black hover:bg-neutral-off-white">About</Link>
+            <Link href="/news" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-black hover:bg-neutral-off-white">News</Link>
+            <button onClick={() => setClassesOpen(!classesOpen)} className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left font-black hover:bg-neutral-off-white">
               Classes <span>{classesOpen ? '−' : '+'}</span>
             </button>
-            {classesOpen && <div className="pl-4 grid gap-1">{classes.map(cls => <Link key={cls.slug} href={`/classes/${cls.slug}`} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-2 text-sm font-semibold text-neutral-dark-gray hover:bg-neutral-off-white">{cls.name}</Link>)}</div>}
+            {classesOpen && <div className="grid gap-1 pl-4">{classes.map(cls => <Link key={cls.slug} href={`/classes/${cls.slug}`} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-2 text-sm font-bold text-neutral-dark-gray hover:bg-neutral-off-white">{cls.name}</Link>)}</div>}
             {sitePages.length > 0 && (
               <>
-                <button onClick={() => setPagesOpen(!pagesOpen)} className="w-full rounded-2xl px-4 py-3 text-left font-bold hover:bg-neutral-off-white flex items-center justify-between">
+                <button onClick={() => setPagesOpen(!pagesOpen)} className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left font-black hover:bg-neutral-off-white">
                   Pages <span>{pagesOpen ? '−' : '+'}</span>
                 </button>
-                {pagesOpen && <div className="pl-4 grid gap-1">{sitePages.map(page => <Link key={page.slug} href={pageHref(page)} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-2 text-sm font-semibold text-neutral-dark-gray hover:bg-neutral-off-white">{page.title}</Link>)}</div>}
+                {pagesOpen && <div className="grid gap-1 pl-4">{sitePages.map(page => <Link key={page.slug} href={pageHref(page)} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-2 text-sm font-bold text-neutral-dark-gray hover:bg-neutral-off-white">{page.title}</Link>)}</div>}
               </>
             )}
-            <Link href="/links" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-bold hover:bg-neutral-off-white">Links</Link>
-            <Link href="/schedule" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-bold hover:bg-neutral-off-white">Schedule</Link>
-            <Link href="/whats-happening" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-bold hover:bg-neutral-off-white">What&apos;s Happening</Link>
-            <Link href="/admin/login" onClick={() => setMenuOpen(false)} className="block rounded-2xl border border-neutral-medium-gray/80 bg-accent-cyan/10 px-4 py-3 font-black text-neutral-text hover:bg-accent-cyan/20">Teacher Login</Link>
+            <Link href="/links" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-black hover:bg-neutral-off-white">Links</Link>
+            <Link href="/schedule" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-black hover:bg-neutral-off-white">Schedule</Link>
+            <Link href="/whats-happening" onClick={() => setMenuOpen(false)} className="block rounded-2xl px-4 py-3 font-black hover:bg-neutral-off-white">What&apos;s Happening</Link>
+            <Link href="/admin/login" onClick={() => setMenuOpen(false)} className="block rounded-2xl border-2 border-neutral-medium-gray/80 bg-accent-cyan/12 px-4 py-3 font-black text-neutral-text hover:bg-accent-cyan/20">Teacher Login</Link>
           </div>
         </div>
       )}

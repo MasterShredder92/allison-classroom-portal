@@ -61,16 +61,16 @@ export default function ClassPage() {
     <div className="classroom-shell py-10 sm:py-14">
       {classInfo ? (
         <>
-          <section className="paper-card rounded-[2rem] p-8 sm:p-10">
+          <section className="page-hero">
             <div className="relative z-10 max-w-3xl">
               <span className="section-eyebrow">{classInfo.grade} Grade</span>
-              <h1 className="mt-4 font-serif text-5xl font-black tracking-tight text-neutral-text">{classInfo.display_name}</h1>
+              <h1 className="mt-4 font-serif text-5xl font-black leading-none tracking-tight text-neutral-text sm:text-6xl">{classInfo.display_name}</h1>
               <p className="mt-4 text-lg leading-8 text-neutral-dark-gray">Assignments and resources for {classInfo.subject}. This page keeps the class-specific work easy for families to find.</p>
             </div>
           </section>
           <section className="mt-8">
             <h2 className="mb-5 font-serif text-3xl font-black text-neutral-text">Assignments</h2>
-            {assignments.length > 0 ? <div className="grid grid-cols-1 gap-4 md:grid-cols-2">{assignments.map(assignment => <AssignmentCard key={assignment.id} assignment={assignment} />)}</div> : <div className="empty-state rounded-[2rem] p-10 text-center"><div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl bg-accent-yellow/35 text-3xl">📝</div><h3 className="font-serif text-3xl font-black text-neutral-text">No assignments yet</h3><p className="mx-auto mt-3 max-w-xl leading-7 text-neutral-dark-gray">Assignments for this class will appear here after Allison posts them.</p></div>}
+            {assignments.length > 0 ? <div className="grid grid-cols-1 gap-4 md:grid-cols-2">{assignments.map(assignment => <AssignmentCard key={assignment.id} assignment={assignment} />)}</div> : <div className="empty-state rounded-[2rem] p-10 text-center"><div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl bg-accent-yellow/35 text-3xl">📝</div><h3 className="font-serif text-4xl font-black text-neutral-text">No assignments yet</h3><p className="mx-auto mt-3 max-w-xl leading-7 text-neutral-dark-gray">Assignments for this class will appear here after Allison posts them.</p></div>}
           </section>
         </>
       ) : (

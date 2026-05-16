@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react'
+
 interface Link {
   id: string
   category: string
@@ -8,26 +10,29 @@ interface Link {
 }
 
 const categoryColors: Record<string, string> = {
-  gradebook: 'border-accent-yellow bg-accent-yellow/20',
-  school: 'border-accent-sky-blue bg-accent-sky-blue/20',
-  classroom_tools: 'border-accent-cyan bg-accent-cyan/15',
-  reading: 'border-accent-lavender bg-accent-lavender/25',
-  curriculum: 'border-accent-purple bg-accent-purple/20',
-  other: 'border-accent-light-pink bg-accent-light-pink/25',
+  gradebook: 'border-accent-yellow bg-accent-yellow/25',
+  school: 'border-accent-sky-blue bg-accent-sky-blue/25',
+  classroom_tools: 'border-accent-cyan bg-accent-cyan/18',
+  reading: 'border-accent-lavender bg-accent-lavender/28',
+  curriculum: 'border-accent-purple bg-accent-purple/22',
+  other: 'border-accent-light-pink bg-accent-light-pink/28',
 }
 
 export default function LinkCard({ link }: { link: Link }) {
   const style = categoryColors[link.category] || categoryColors.other
   return (
-    <a href={link.url} target="_blank" rel="noopener noreferrer" className={`focus-ring group block rounded-[1.5rem] border-b-4 ${style} p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl`}>
-      <div className="mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-white text-xl shadow-sm">↗</div>
-      <h3 className="font-serif text-xl font-black text-neutral-text transition-colors group-hover:text-accent-cyan">{link.title}</h3>
-      {link.description && <p className="mt-3 line-clamp-2 text-sm leading-6 text-neutral-dark-gray">{link.description}</p>}
-      <div className="mt-5 flex items-center justify-between gap-3">
-        {link.audience && <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-black uppercase tracking-[0.14em] text-neutral-dark-gray">{link.audience}</span>}
-        <span className="ml-auto text-sm font-black text-accent-cyan transition-transform group-hover:translate-x-1">Open →</span>
+    <a href={link.url} target="_blank" rel="noopener noreferrer" className={`focus-ring group bulletin-card pop-card block rounded-[1.65rem] border-b-[6px] ${style} p-6 pt-9`} style={{ '--tilt': '-0.9deg' } as CSSProperties}>
+      <div className="relative z-10">
+        <div className="mb-5 flex items-start justify-between gap-4">
+          <div className="grid h-14 w-14 place-items-center rounded-[1.2rem] bg-white text-2xl shadow-sm transition-transform group-hover:rotate-6 group-hover:scale-110">↗</div>
+          <span className="rounded-full bg-white/80 px-3 py-1 text-sm font-black text-accent-cyan transition-transform group-hover:translate-x-1">Open →</span>
+        </div>
+        <h3 className="font-serif text-2xl font-black leading-tight text-neutral-text transition-colors group-hover:text-accent-cyan">{link.title}</h3>
+        {link.description && <p className="mt-3 line-clamp-2 text-sm font-bold leading-6 text-neutral-dark-gray">{link.description}</p>}
+        <div className="mt-5 flex items-center justify-between gap-3">
+          {link.audience && <span className="rounded-full bg-white/76 px-3 py-1 text-xs font-black uppercase tracking-[0.14em] text-neutral-dark-gray shadow-sm">{link.audience}</span>}
+        </div>
       </div>
     </a>
   )
 }
-

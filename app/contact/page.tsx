@@ -26,13 +26,13 @@ export default function ContactPage() {
 
   return (
     <div className="classroom-shell py-10 sm:py-14">
-      <section className="paper-card rounded-[2rem] p-8 sm:p-10">
+      <section className="page-hero">
         <div className="relative z-10 max-w-3xl">
           <span className="section-eyebrow">Contact</span>
-          <h1 className="mt-4 font-serif text-5xl font-black tracking-tight text-neutral-text">
+          <h1 className="mt-4 font-serif text-5xl font-black leading-none tracking-tight text-neutral-text sm:text-6xl">
             {page?.title || 'Need to reach Allison?'}
           </h1>
-          <p className="mt-4 text-lg leading-8 text-neutral-dark-gray">
+          <p className="mt-4 text-lg font-bold leading-8 text-neutral-dark-gray">
             Contact details, classroom communication notes, and family instructions.
           </p>
         </div>

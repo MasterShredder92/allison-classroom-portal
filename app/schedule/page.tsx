@@ -99,10 +99,10 @@ export default function SchedulePage() {
       <section className="paper-card notebook-lines rounded-[2rem] p-8 sm:p-10">
         <div className="relative z-10 max-w-3xl">
           <span className="section-eyebrow">Class Schedule</span>
-          <h1 className="mt-4 font-serif text-5xl font-black tracking-tight text-neutral-text">
+          <h1 className="mt-4 font-serif text-5xl font-black leading-none tracking-tight text-neutral-text sm:text-6xl">
             {schedule?.title || 'Schedule'}
           </h1>
-          <p className="mt-4 text-lg leading-8 text-neutral-dark-gray">
+          <p className="mt-4 text-lg font-bold leading-8 text-neutral-dark-gray">
             Check this page for classroom timing, recurring blocks, important calendar updates, and schedule notes.
           </p>
         </div>

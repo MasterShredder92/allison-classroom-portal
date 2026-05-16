@@ -37,7 +37,7 @@ export default async function CustomPage({ params }: PageProps) {
       <section className="paper-card notebook-lines rounded-[2rem] p-8 sm:p-10">
         <div className="relative z-10 max-w-3xl">
           <span className="section-eyebrow">Classroom Page</span>
-          <h1 className="mt-4 font-serif text-5xl font-black tracking-tight text-neutral-text">{page.title}</h1>
+          <h1 className="mt-4 font-serif text-5xl font-black leading-none tracking-tight text-neutral-text sm:text-6xl">{page.title}</h1>
         </div>
       </section>
 

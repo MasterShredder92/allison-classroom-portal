@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react'
+
 interface Assignment {
   id: string
   class_name?: string
@@ -19,21 +21,25 @@ export default function AssignmentCard({ assignment }: { assignment: Assignment 
   const formattedDate = dueDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 
   return (
-    <article className="relative overflow-hidden rounded-[1.5rem] border border-neutral-medium-gray/70 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-xl">
-      <div className="absolute inset-y-0 left-0 w-2 bg-accent-cyan" />
-      {assignment.class_name && <p className="mb-2 text-xs font-black uppercase tracking-[0.18em] text-accent-cyan">{assignment.class_name}</p>}
-      <h3 className="font-serif text-xl font-black leading-tight text-neutral-text">{assignment.title}</h3>
-      {assignment.description && <p className="mt-3 line-clamp-2 text-sm leading-6 text-neutral-dark-gray">{assignment.description}</p>}
-      <div className="mt-5 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2 rounded-full bg-neutral-off-white px-3 py-2 text-sm font-black text-neutral-dark-gray">
-          <span>📅</span>
-          <span className={isDueToday ? 'text-accent-pink' : isOverdue ? 'line-through' : ''}>{formattedDate}</span>
+    <article className="bulletin-card pop-card group rounded-[1.55rem] p-5 pt-8" style={{ '--tilt': '0.8deg' } as CSSProperties}>
+      <div className="absolute left-0 top-0 h-full w-2 bg-accent-cyan" />
+      <div className="relative z-10">
+        {assignment.class_name && <p className="mb-2 text-xs font-black uppercase tracking-[0.18em] text-accent-cyan">{assignment.class_name}</p>}
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="font-serif text-2xl font-black leading-tight text-neutral-text transition-colors group-hover:text-accent-cyan">{assignment.title}</h3>
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-accent-yellow/55 shadow-sm">✏️</span>
         </div>
-        {isDueToday && <span className="rounded-full bg-accent-pink px-3 py-1 text-xs font-black text-white">Today</span>}
-        {isOverdue && <span className="rounded-full bg-neutral-medium-gray px-3 py-1 text-xs font-black text-neutral-dark-gray">Past Due</span>}
+        {assignment.description && <p className="mt-3 line-clamp-2 text-sm font-bold leading-6 text-neutral-dark-gray">{assignment.description}</p>}
+        <div className="mt-5 flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-2 rounded-full bg-neutral-off-white px-3 py-2 text-sm font-black text-neutral-dark-gray shadow-inner">
+            <span>📅</span>
+            <span className={isDueToday ? 'text-accent-pink' : isOverdue ? 'line-through' : ''}>{formattedDate}</span>
+          </div>
+          {isDueToday && <span className="rounded-full bg-accent-pink px-3 py-1 text-xs font-black text-white">Today</span>}
+          {isOverdue && <span className="rounded-full bg-neutral-medium-gray px-3 py-1 text-xs font-black text-neutral-dark-gray">Past Due</span>}
+        </div>
+        {(assignment.resource_url || assignment.file_url) && <a href={assignment.resource_url || assignment.file_url} target="_blank" rel="noopener noreferrer" className="fun-button mt-5 rounded-full bg-accent-cyan px-4 py-2 text-sm font-black text-white shadow-sm">Open resource →</a>}
       </div>
-      {(assignment.resource_url || assignment.file_url) && <a href={assignment.resource_url || assignment.file_url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex rounded-full bg-accent-cyan px-4 py-2 text-sm font-black text-white shadow-sm hover:opacity-90">Open resource →</a>}
     </article>
   )
 }
-
