@@ -144,3 +144,55 @@ a {
   outline: 3px solid rgba(0, 208, 208, 0.55);
   outline-offset: 3px;
 }
+
+.rich-content {
+  color: var(--color-neutral-text);
+  line-height: 1.75;
+}
+
+.rich-content h1,
+.rich-content h2,
+.rich-content h3 {
+  font-family: var(--font-serif);
+  font-weight: 900;
+  line-height: 1.12;
+  margin: 1.6rem 0 0.75rem;
+}
+
+.rich-content h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); }
+.rich-content h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+.rich-content h3 { font-size: clamp(1.35rem, 3vw, 1.85rem); }
+
+.rich-content p,
+.rich-content ul,
+.rich-content ol {
+  margin: 0.9rem 0;
+}
+
+.rich-content ul,
+.rich-content ol {
+  padding-left: 1.4rem;
+}
+
+.rich-content ul { list-style: disc; }
+.rich-content ol { list-style: decimal; }
+
+.rich-content a {
+  color: #00777a;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.rich-content strong,
+.rich-content b { font-weight: 900; }
+.rich-content em,
+.rich-content i { font-style: italic; }
+
+.rich-content blockquote {
+  border-left: 5px solid var(--color-accent-cyan);
+  background: rgba(0, 208, 208, 0.08);
+  border-radius: 1rem;
+  margin: 1.25rem 0;
+  padding: 1rem 1.25rem;
+}

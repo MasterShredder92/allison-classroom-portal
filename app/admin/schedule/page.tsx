@@ -60,7 +60,7 @@ export default function SchedulePage() {
         body: JSON.stringify({ ...formData, active: true }),
       })
       if (!response.ok) {
-        setError(await getApiError(response, 'Schedule could not be saved. Check the image URL and try again.'))
+        setError(await getApiError(response, 'Schedule could not be saved. Check the calendar or image URL and try again.'))
         return
       }
 
@@ -77,7 +77,8 @@ export default function SchedulePage() {
 
   return (
     <div>
-      <h1 className="font-serif text-4xl font-bold text-neutral-text mb-8">Class Schedule</h1>
+      <h1 className="font-serif text-4xl font-bold text-neutral-text mb-3">Class Schedule</h1>
+      <p className="mb-8 max-w-3xl text-neutral-dark-gray">Paste Allison&apos;s public Google Calendar link, Google Calendar embed link, or a hosted schedule image. Whatever is saved here appears on the public Schedule page.</p>
 
       {error && (
         <div role="alert" className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800">
@@ -98,16 +99,16 @@ export default function SchedulePage() {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-neutral-text mb-2">Image URL</label>
+          <label className="block text-sm font-semibold text-neutral-text mb-2">Google Calendar Link or Schedule Image URL</label>
           <input
             type="url"
             value={formData.image_url}
             onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
             className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan"
-            placeholder="https://example.com/schedule.jpg"
+            placeholder="https://calendar.google.com/calendar/embed?src=..."
             required
           />
-          <p className="text-xs text-neutral-dark-gray mt-1">Use Google Drive, Imgur, or another image hosting service</p>
+          <p className="text-xs text-neutral-dark-gray mt-1">Best option: Google Calendar → Settings → Integrate calendar → copy the public embed link. A regular public calendar URL or hosted image URL also works.</p>
         </div>
 
         <div>
@@ -116,7 +117,7 @@ export default function SchedulePage() {
             value={formData.notes}
             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
             className="w-full px-4 py-2 border border-neutral-medium-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-cyan h-20"
-            placeholder="Any schedule notes..."
+            placeholder="Example: Check this calendar weekly for assignment due dates, test dates, and classroom events."
           />
         </div>
 

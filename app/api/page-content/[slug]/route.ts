@@ -9,6 +9,10 @@ type RouteContext = {
   params: Promise<{ slug: string }>
 }
 
+function isProtectedPage(slug: string) {
+  return ['about', 'contact'].includes(slug)
+}
+
 export async function GET(request: NextRequest, context: RouteContext) {
   const limited = rateLimit(request, 'read')
   if (limited) return limited
@@ -45,12 +49,10 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     const parsed = pageContentSchema.parse(body)
     const { data, error } = await admin.supabase
       .from('page_content')
-      .update({ ...parsed, updated_at: new Date().toISOString() })
-      .eq('slug', slug)
+      .upsert({ slug, ...parsed, updated_at: new Date().toISOString() }, { onConflict: 'slug' })
       .select('*')
       .single()
 
-    if (error?.code === 'PGRST116') return fail('Page content not found', 404)
     if (error) throw error
     return ok(data)
   } catch (error) {
@@ -59,3 +61,28 @@ export async function PUT(request: NextRequest, context: RouteContext) {
   }
 }
 
+export async function DELETE(request: NextRequest, context: RouteContext) {
+  const limited = rateLimit(request, 'write')
+  if (limited) return limited
+
+  try {
+    const admin = await requireAdmin(request)
+    if (admin.error) return admin.error
+
+    const { slug } = await context.params
+    if (isProtectedPage(slug)) return fail('About and Contact are required site pages and cannot be deleted.', 400)
+
+    const { data, error } = await admin.supabase
+      .from('page_content')
+      .delete()
+      .eq('slug', slug)
+      .select('*')
+      .single()
+
+    if (error?.code === 'PGRST116') return fail('Page content not found', 404)
+    if (error) throw error
+    return ok(data)
+  } catch (error) {
+    return serverFail(error, 'DELETE /api/page-content/[slug]')
+  }
+}

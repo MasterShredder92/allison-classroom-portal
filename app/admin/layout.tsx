@@ -145,7 +145,7 @@ export default function AdminLayout({
               href="/admin/pages"
               className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
             >
-              Pages
+              Edit Site
             </Link>
             <hr className="my-4" />
             <button
@@ -202,7 +202,7 @@ export default function AdminLayout({
             href="/admin/pages"
             className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
           >
-            Pages
+            Edit Site
           </Link>
           <hr className="my-4" />
           <button

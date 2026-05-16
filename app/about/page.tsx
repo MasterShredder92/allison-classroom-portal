@@ -1,27 +1,55 @@
+"use client"
+
+import { useEffect, useState } from 'react'
+import RichContent from '@/components/RichContent'
+
+interface PageContent {
+  title: string
+  body_markdown?: string
+}
+
 export default function AboutPage() {
+  const [page, setPage] = useState<PageContent | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/page-content/about')
+      .then(async res => {
+        if (!res.ok) return null
+        const payload = await res.json()
+        return payload.data as PageContent
+      })
+      .then(setPage)
+      .catch(error => console.error('Error loading About page:', error))
+      .finally(() => setLoading(false))
+  }, [])
+
   return (
     <div className="classroom-shell py-10 sm:py-14">
-      <section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
-        <div className="paper-card rounded-[2rem] p-8 sm:p-10">
-          <div className="relative z-10">
-            <span className="section-eyebrow">Meet the Teacher</span>
-            <h1 className="mt-4 font-serif text-5xl font-black tracking-tight text-neutral-text">About Allison&apos;s Classroom</h1>
-            <p className="mt-5 text-lg leading-8 text-neutral-dark-gray">This portal gives families one clear place to find classroom updates, assignments, school links, schedules, and snapshots from the school year.</p>
-          </div>
+      <section className="paper-card notebook-lines rounded-[2rem] p-8 sm:p-10">
+        <div className="relative z-10 max-w-3xl">
+          <span className="section-eyebrow">About the Classroom</span>
+          <h1 className="mt-4 font-serif text-5xl font-black tracking-tight text-neutral-text">
+            {page?.title || 'About Allison\'s Classroom'}
+          </h1>
+          <p className="mt-4 text-lg leading-8 text-neutral-dark-gray">
+            Classroom details, expectations, and teacher notes for families.
+          </p>
         </div>
-        <div className="rounded-[2rem] border border-neutral-medium-gray/70 bg-white/80 p-8 shadow-[0_18px_45px_rgba(65,47,25,0.1)]">
-          <h2 className="font-serif text-3xl font-black text-neutral-text">Built for parent clarity</h2>
-          <div className="mt-6 grid gap-4">
-            {['Important announcements stay easy to find.', 'Assignments are grouped by class so families do not hunt.', 'Helpful links live in one organized resource shelf.', 'Classroom moments can be shared without cluttering the main workflow.'].map((item, index) => (
-              <div key={item} className="flex gap-4 rounded-2xl bg-neutral-off-white p-4">
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent-cyan text-sm font-black text-white">{index + 1}</span>
-                <p className="font-semibold leading-6 text-neutral-dark-gray">{item}</p>
-              </div>
-            ))}
+      </section>
+
+      <section className="mt-8 rounded-[2rem] border border-neutral-medium-gray/70 bg-white p-8 shadow-sm sm:p-10">
+        {loading ? (
+          <div className="space-y-4">
+            <div className="h-8 w-2/3 animate-pulse rounded bg-neutral-light-gray" />
+            <div className="h-32 animate-pulse rounded bg-neutral-light-gray" />
           </div>
-        </div>
+        ) : page?.body_markdown ? (
+          <RichContent html={page.body_markdown} />
+        ) : (
+          <p className="leading-7 text-neutral-dark-gray">This page is ready for Allison to edit in the Teacher Dashboard.</p>
+        )}
       </section>
     </div>
   )
 }
-

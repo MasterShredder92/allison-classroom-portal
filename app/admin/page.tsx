@@ -160,7 +160,15 @@ export default function AdminDashboard() {
             className="bg-neutral-light-gray p-4 rounded-lg hover:bg-neutral-medium-gray transition-colors"
           >
             <p className="font-semibold text-neutral-text mb-1">Update Schedule</p>
-            <p className="text-neutral-dark-gray text-sm">Change class schedule</p>
+            <p className="text-neutral-dark-gray text-sm">Paste a Google Calendar link or schedule image</p>
+          </Link>
+
+          <Link
+            href="/admin/pages"
+            className="bg-accent-cyan/10 p-4 rounded-lg hover:bg-accent-cyan/20 transition-colors border border-accent-cyan/30"
+          >
+            <p className="font-semibold text-neutral-text mb-1">Edit Site</p>
+            <p className="text-neutral-dark-gray text-sm">Add pages and edit text without code</p>
           </Link>
         </div>
       </div>
