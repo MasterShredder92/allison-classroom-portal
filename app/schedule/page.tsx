@@ -39,10 +39,6 @@ function getGoogleCalendarEmbedUrl(input?: string) {
       return embedUrl.toString()
     }
 
-    if (/\/calendar\/u\/\d+\/r/.test(url.pathname) || url.pathname === '/calendar/r') {
-      return 'https://calendar.google.com/calendar/embed?ctz=America%2FChicago'
-    }
-
     return ''
   } catch {
     return ''
@@ -134,7 +130,7 @@ export default function SchedulePage() {
               <div className="rounded-[1.5rem] border border-neutral-medium-gray/70 bg-white p-6 shadow-sm">
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-cyan">Schedule Link</p>
                 <a href={safeScheduleLink} target="_blank" rel="noreferrer" className="mt-3 inline-flex rounded-xl bg-accent-cyan px-5 py-3 font-black text-white hover:opacity-90">
-                  Open Schedule
+                  Open Schedule / Calendar
                 </a>
               </div>
             ) : null}
