@@ -11,24 +11,36 @@ interface ScheduleRecord {
   updated_at?: string
 }
 
+function extractUrlFromTeacherInput(input?: string) {
+  const value = input?.trim()
+  if (!value) return ''
+
+  const iframeSrc = value.match(/src=["']([^"']+)["']/i)?.[1]
+  if (iframeSrc) return iframeSrc.replace(/&amp;/g, '&')
+
+  return value
+}
+
 function getGoogleCalendarEmbedUrl(input?: string) {
-  if (!input) return ''
+  const rawUrl = extractUrlFromTeacherInput(input)
+  if (!rawUrl) return ''
 
   try {
-    const url = new URL(input.trim())
+    const url = new URL(rawUrl)
+    if (!url.hostname.includes('calendar.google.com')) return ''
 
-    if (url.hostname.includes('calendar.google.com')) {
-      if (url.pathname.includes('/calendar/embed')) return url.toString()
+    if (url.pathname.includes('/calendar/embed')) return url.toString()
 
-      const src = url.searchParams.get('src')
-      if (src) {
-        const embedUrl = new URL('https://calendar.google.com/calendar/embed')
-        embedUrl.searchParams.set('src', src)
-        embedUrl.searchParams.set('ctz', url.searchParams.get('ctz') || Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Chicago')
-        return embedUrl.toString()
-      }
+    const src = url.searchParams.get('src')
+    if (src) {
+      const embedUrl = new URL('https://calendar.google.com/calendar/embed')
+      embedUrl.searchParams.set('src', src)
+      embedUrl.searchParams.set('ctz', url.searchParams.get('ctz') || 'America/Chicago')
+      return embedUrl.toString()
+    }
 
-      return url.toString().replace('/calendar/u/0/r', '/calendar/embed').replace('/calendar/r', '/calendar/embed')
+    if (/\/calendar\/u\/\d+\/r/.test(url.pathname) || url.pathname === '/calendar/r') {
+      return 'https://calendar.google.com/calendar/embed?ctz=America%2FChicago'
     }
 
     return ''
@@ -37,9 +49,23 @@ function getGoogleCalendarEmbedUrl(input?: string) {
   }
 }
 
+function getSafeLinkUrl(input?: string) {
+  const rawUrl = extractUrlFromTeacherInput(input)
+  if (!rawUrl) return ''
+
+  try {
+    const url = new URL(rawUrl)
+    if (url.protocol === 'http:' || url.protocol === 'https:') return url.toString()
+    return ''
+  } catch {
+    return ''
+  }
+}
+
 function isImageUrl(input?: string) {
-  if (!input) return false
-  return /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(input)
+  const rawUrl = extractUrlFromTeacherInput(input)
+  if (!rawUrl) return false
+  return /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(rawUrl)
 }
 
 export default function SchedulePage() {
@@ -65,6 +91,7 @@ export default function SchedulePage() {
   }, [])
 
   const calendarEmbedUrl = useMemo(() => getGoogleCalendarEmbedUrl(schedule?.image_url), [schedule?.image_url])
+  const safeScheduleLink = useMemo(() => getSafeLinkUrl(schedule?.image_url), [schedule?.image_url])
   const showImage = isImageUrl(schedule?.image_url) && !calendarEmbedUrl
 
   return (
@@ -98,15 +125,15 @@ export default function SchedulePage() {
                   loading="lazy"
                 />
               </div>
-            ) : showImage ? (
+            ) : showImage && safeScheduleLink ? (
               <div className="overflow-hidden rounded-[1.5rem] border border-neutral-medium-gray/70 bg-white p-3 shadow-sm">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={schedule.image_url} alt={schedule.title || 'Class schedule'} className="w-full rounded-[1.25rem]" />
+                <img src={safeScheduleLink} alt={schedule.title || 'Class schedule'} className="w-full rounded-[1.25rem]" />
               </div>
-            ) : schedule.image_url ? (
+            ) : safeScheduleLink ? (
               <div className="rounded-[1.5rem] border border-neutral-medium-gray/70 bg-white p-6 shadow-sm">
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-cyan">Schedule Link</p>
-                <a href={schedule.image_url} target="_blank" rel="noreferrer" className="mt-3 inline-flex rounded-xl bg-accent-cyan px-5 py-3 font-black text-white hover:opacity-90">
+                <a href={safeScheduleLink} target="_blank" rel="noreferrer" className="mt-3 inline-flex rounded-xl bg-accent-cyan px-5 py-3 font-black text-white hover:opacity-90">
                   Open Schedule
                 </a>
               </div>
@@ -121,7 +148,7 @@ export default function SchedulePage() {
           </div>
         ) : (
           <div className="empty-state rounded-[2rem] p-10 text-center">
-            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl bg-accent-lavender/25 text-3xl">🗓️</div>
+            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl bg-accent-lavender/25 text-3xl">📅</div>
             <h2 className="font-serif text-3xl font-black text-neutral-text">No schedule posted yet</h2>
             <p className="mx-auto mt-3 max-w-xl leading-7 text-neutral-dark-gray">Schedule details will appear here after they are saved in the admin dashboard.</p>
           </div>

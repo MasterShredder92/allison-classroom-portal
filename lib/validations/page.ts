@@ -9,7 +9,7 @@ export type PageContentInput = z.infer<typeof pageContentSchema>
 
 export const scheduleSchema = z.object({
   title: z.string().max(200).optional(),
-  image_url: z.string().url().optional(),
+  image_url: z.string().max(2000, 'Schedule link is too long').optional().or(z.literal('')),
   notes: z.string().max(1000).optional(),
   active: z.boolean().default(true),
 })
