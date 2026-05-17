@@ -1,6 +1,11 @@
 import type { NextRequest } from 'next/server'
 import { fail } from '@/lib/api/responses'
-import { createServiceSupabaseClient } from '@/lib/supabase/server'
+import {
+  createServiceSupabaseClient,
+  createUserSupabaseClient,
+  getConfiguredSupabaseServiceRole,
+  hasConfiguredSupabaseServiceRole,
+} from '@/lib/supabase/server'
 
 const TEMP_ADMIN_EMAIL = 'admin@allison-classroom.test'
 
@@ -47,14 +52,14 @@ export async function requireAdmin(request: NextRequest) {
   const accessToken = getBearerToken(request)
 
   if (!accessToken) {
-    return { error: fail('Missing bearer token', 401), supabase: null, userId: null }
+    return { error: fail('Missing bearer token', 401), supabase: null, userId: null, authMode: null }
   }
 
   const supabase = createServiceSupabaseClient()
   const { data: authData, error: authError } = await supabase.auth.getUser(accessToken)
 
   if (authError || !authData.user) {
-    return { error: fail('Invalid bearer token', 401), supabase: null, userId: null }
+    return { error: fail('Invalid bearer token', 401), supabase: null, userId: null, authMode: null }
   }
   const { data: profile, error: profileError } = await supabase
     .from('users')
@@ -65,14 +70,23 @@ export async function requireAdmin(request: NextRequest) {
   const isApprovedTempAdmin = authData.user.email?.toLowerCase() === TEMP_ADMIN_EMAIL
 
   if ((profileError || !profile) && !isApprovedTempAdmin) {
-    return { error: fail('Admin profile not found', 403), supabase: null, userId: null }
+    return { error: fail('Admin profile not found', 403), supabase: null, userId: null, authMode: null }
   }
 
   if (profile?.role !== 'admin' && !isApprovedTempAdmin) {
-    return { error: fail('Admin access required', 403), supabase: null, userId: null }
+    return { error: fail('Admin access required', 403), supabase: null, userId: null, authMode: null }
   }
 
-  return { error: null, supabase, userId: authData.user.id }
+  const hasServiceRole = hasConfiguredSupabaseServiceRole()
+  const writeSupabase = hasServiceRole ? supabase : createUserSupabaseClient(accessToken)
+  const configuredRole = getConfiguredSupabaseServiceRole()
+
+  return {
+    error: null,
+    supabase: writeSupabase,
+    userId: authData.user.id,
+    authMode: hasServiceRole ? 'service_role' : `user_token_with_${configuredRole || 'unknown'}_server_key`,
+  }
 }
 
 export async function readJson(request: NextRequest) {

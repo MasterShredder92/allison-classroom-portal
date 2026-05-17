@@ -49,10 +49,28 @@ export async function PUT(request: NextRequest) {
 
       const { error } = await admin.supabase
         .from('site_settings')
-        .update({ value: value.trim(), updated_at: now })
-        .eq('key', definition.key)
+        .upsert({
+          key: definition.key,
+          label: definition.label,
+          description: definition.description,
+          group_name: definition.group,
+          field_type: definition.fieldType,
+          value: value.trim(),
+          sort_order: definition.sortOrder,
+          updated_at: now,
+        }, { onConflict: 'key' })
 
-      if (error) throw error
+      if (error) {
+        console.error('PUT /api/site-settings write failed', {
+          key: definition.key,
+          authMode: admin.authMode,
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+        })
+        return fail(`Site settings save failed: ${error.code || 'database_error'} ${error.message}`, 500)
+      }
     }
 
     const { data, error: readError } = await admin.supabase
@@ -60,7 +78,16 @@ export async function PUT(request: NextRequest) {
       .select('key, label, description, group_name, field_type, value, sort_order, updated_at')
       .order('sort_order', { ascending: true })
 
-    if (readError) throw readError
+    if (readError) {
+      console.error('PUT /api/site-settings readback failed', {
+        authMode: admin.authMode,
+        code: readError.code,
+        message: readError.message,
+        details: readError.details,
+        hint: readError.hint,
+      })
+      return fail(`Site settings readback failed: ${readError.code || 'database_error'} ${readError.message}`, 500)
+    }
 
     const merged = mergeSiteSettings(data || [])
     return ok(siteSettingsForRows(merged))
