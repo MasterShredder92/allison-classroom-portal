@@ -41,26 +41,19 @@ export async function PUT(request: NextRequest) {
     if (!body) return fail('Invalid JSON body', 400)
 
     const parsed = siteSettingsUpdateSchema.parse(body)
-    const definitionsByKey = new Map(siteSettingDefinitions.map(definition => [definition.key, definition]))
-    const rows = Object.entries(parsed.settings).map(([key, value]) => {
-      const definition = definitionsByKey.get(key as SiteSettingKey)
-      return {
-        key,
-        label: definition?.label || key,
-        description: definition?.description || '',
-        group_name: definition?.group || 'Site Content',
-        field_type: definition?.fieldType || 'text',
-        value: value.trim(),
-        sort_order: definition?.sortOrder || 999,
-        updated_at: new Date().toISOString(),
-      }
-    })
+    const now = new Date().toISOString()
 
-    const { error } = await admin.supabase
-      .from('site_settings')
-      .upsert(rows, { onConflict: 'key' })
+    for (const definition of siteSettingDefinitions) {
+      const value = parsed.settings[definition.key as SiteSettingKey]
+      if (typeof value !== 'string') continue
 
-    if (error) throw error
+      const { error } = await admin.supabase
+        .from('site_settings')
+        .update({ value: value.trim(), updated_at: now })
+        .eq('key', definition.key)
+
+      if (error) throw error
+    }
 
     const { data, error: readError } = await admin.supabase
       .from('site_settings')
