@@ -56,13 +56,18 @@ export async function PUT(request: NextRequest) {
       }
     })
 
-    const { data, error } = await admin.supabase
+    const { error } = await admin.supabase
       .from('site_settings')
       .upsert(rows, { onConflict: 'key' })
-      .select('key, label, description, group_name, field_type, value, sort_order, updated_at')
-      .order('sort_order', { ascending: true })
 
     if (error) throw error
+
+    const { data, error: readError } = await admin.supabase
+      .from('site_settings')
+      .select('key, value')
+      .order('sort_order', { ascending: true })
+
+    if (readError) throw readError
 
     const merged = mergeSiteSettings(data || [])
     return ok(siteSettingsForRows(merged))
