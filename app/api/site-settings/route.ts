@@ -57,7 +57,7 @@ export async function PUT(request: NextRequest) {
 
     const { data, error: readError } = await admin.supabase
       .from('site_settings')
-      .select('key, value')
+      .select('key, label, description, group_name, field_type, value, sort_order, updated_at')
       .order('sort_order', { ascending: true })
 
     if (readError) throw readError
