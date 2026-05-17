@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import GlobalHeader from '@/components/GlobalHeader'
+import AnimatedWolfMascot from '@/components/AnimatedWolfMascot'
 
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -17,6 +18,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
       <div className="rainbow-strip relative z-20" />
       <GlobalHeader />
       <main className="relative z-10 flex-1">{children}</main>
+      <AnimatedWolfMascot />
       <footer className="relative z-10 mt-20 border-t-2 border-neutral-medium-gray/60 bg-white/70 backdrop-blur-xl">
         <div className="classroom-shell py-8">
           <div className="paper-card flex flex-col gap-5 rounded-[2rem] p-6 sm:flex-row sm:items-center sm:justify-between">
