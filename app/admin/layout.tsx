@@ -83,7 +83,7 @@ export default function AdminLayout({
     <div className="min-h-screen bg-neutral-off-white flex flex-col md:flex-row">
       {/* Sidebar */}
       <aside className="bg-neutral-light-gray border-b md:border-r md:border-b-0 border-neutral-medium-gray md:w-64 md:min-h-screen">
-        <div className="sticky top-0 p-6 md:p-4">
+        <div className="sticky top-0 z-30 border-b border-neutral-medium-gray bg-neutral-light-gray p-6 shadow-sm md:border-b-0 md:p-4">
           <div className="flex items-center justify-between md:block">
             <div className="space-y-3">
               <Link href="/admin" className="block font-serif text-xl font-bold text-neutral-text">
@@ -118,6 +118,12 @@ export default function AdminLayout({
               Dashboard
             </Link>
             <Link
+              href="/admin/logs"
+              className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
+            >
+              Logs
+            </Link>
+            <Link
               href="/admin/schedule"
               className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
             >
@@ -149,6 +155,12 @@ export default function AdminLayout({
             className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
           >
             Dashboard
+          </Link>
+          <Link
+            href="/admin/logs"
+            className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
+          >
+            Logs
           </Link>
           <Link
             href="/admin/schedule"

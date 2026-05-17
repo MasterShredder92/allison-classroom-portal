@@ -122,6 +122,14 @@ export default function AdminDashboard() {
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Link
+            href="/admin/logs"
+            className="rounded-2xl border border-accent-cyan/35 bg-accent-cyan/12 p-4 transition hover:-translate-y-0.5 hover:bg-accent-cyan/20"
+          >
+            <p className="font-black text-neutral-text">Manage Logs</p>
+            <p className="mt-1 text-sm font-semibold text-neutral-dark-gray">Filter, edit, or delete announcements, assignments, links, and photos.</p>
+          </Link>
+
+          <Link
             href="/admin/schedule"
             className="rounded-2xl border border-accent-sky-blue/35 bg-accent-sky-blue/12 p-4 transition hover:-translate-y-0.5 hover:bg-accent-sky-blue/20"
           >
