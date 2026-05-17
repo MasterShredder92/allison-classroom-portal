@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server'
 import { fail } from '@/lib/api/responses'
-import { createServiceSupabaseClient, createUserSupabaseClient } from '@/lib/supabase/server'
+import { createServiceSupabaseClient } from '@/lib/supabase/server'
 
 const TEMP_ADMIN_EMAIL = 'admin@allison-classroom.test'
 
@@ -50,14 +50,12 @@ export async function requireAdmin(request: NextRequest) {
     return { error: fail('Missing bearer token', 401), supabase: null, userId: null }
   }
 
-  const userSupabase = createUserSupabaseClient(accessToken)
-  const { data: authData, error: authError } = await userSupabase.auth.getUser(accessToken)
+  const supabase = createServiceSupabaseClient()
+  const { data: authData, error: authError } = await supabase.auth.getUser(accessToken)
 
   if (authError || !authData.user) {
     return { error: fail('Invalid bearer token', 401), supabase: null, userId: null }
   }
-
-  const supabase = createServiceSupabaseClient()
   const { data: profile, error: profileError } = await supabase
     .from('users')
     .select('id, role')
