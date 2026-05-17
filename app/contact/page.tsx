@@ -38,7 +38,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="mt-8 rounded-[2rem] border border-neutral-medium-gray/70 bg-white p-8 shadow-sm sm:p-10">
+      <section className="paper-card mt-8 rounded-[2rem] p-8 sm:p-10">
         {loading ? (
           <div className="space-y-4">
             <div className="h-8 w-2/3 animate-pulse rounded bg-neutral-light-gray" />

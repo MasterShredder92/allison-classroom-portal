@@ -275,7 +275,7 @@ export default function AdminQuickResourcePost({ compact = false }: { compact?: 
       </div>
 
       {error && <div role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800">{error}</div>}
-      {message && <div role="status" className="mb-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-green-800">{message}</div>}
+      {message && <div role="status" className="mb-4 rounded-xl border border-accent-sky-blue/35 bg-accent-sky-blue/15 px-4 py-3 text-sm font-semibold text-accent-cyan">{message}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-4" dir="ltr">
         <div className="grid gap-4 lg:grid-cols-3">

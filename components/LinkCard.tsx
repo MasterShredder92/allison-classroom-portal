@@ -11,12 +11,12 @@ interface Link {
 }
 
 const categoryColors: Record<string, string> = {
-  gradebook: 'border-accent-yellow bg-accent-yellow/25',
-  school: 'border-accent-sky-blue bg-accent-sky-blue/25',
-  classroom_tools: 'border-accent-cyan bg-accent-cyan/18',
-  reading: 'border-accent-lavender bg-accent-lavender/28',
-  curriculum: 'border-accent-purple bg-accent-purple/22',
-  other: 'border-accent-light-pink bg-accent-light-pink/28',
+  gradebook: 'border-accent-light-pink bg-accent-light-pink/24',
+  school: 'border-accent-sky-blue bg-accent-sky-blue/22',
+  classroom_tools: 'border-accent-sky-blue bg-accent-sky-blue/20',
+  reading: 'border-accent-light-pink bg-accent-light-pink/24',
+  curriculum: 'border-accent-sky-blue bg-accent-sky-blue/22',
+  other: 'border-accent-light-pink bg-accent-light-pink/24',
 }
 
 export default function LinkCard({ link }: { link: Link }) {

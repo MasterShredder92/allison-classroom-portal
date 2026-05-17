@@ -16,7 +16,7 @@ const textColors = [
   { label: 'Cyan', value: '#008f94' },
   { label: 'Pink', value: '#c9367f' },
   { label: 'Purple', value: '#7456c8' },
-  { label: 'Green', value: '#28624f' },
+  { label: 'Pastel Blue', value: '#008f94' },
   { label: 'Red', value: '#b42318' },
   { label: 'Yellow', value: '#8a5a00' },
 ]
@@ -27,7 +27,7 @@ const highlightColors = [
   { label: 'Pink', value: '#ffd4ea' },
   { label: 'Cyan', value: '#c8fbff' },
   { label: 'Lavender', value: '#e3ddff' },
-  { label: 'Green', value: '#dff8e8' },
+  { label: 'Pastel Blue', value: '#c8fbff' },
 ]
 
 async function getApiError(response: Response, fallback: string) {
@@ -303,7 +303,7 @@ export default function AdminPagesPage() {
       </div>
 
       {error && <div role="alert" className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800">{error}</div>}
-      {success && <div role="status" className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-green-800">{success}</div>}
+      {success && <div role="status" className="mb-6 rounded-lg border border-accent-sky-blue/35 bg-accent-sky-blue/15 px-4 py-3 text-sm font-semibold text-accent-cyan">{success}</div>}
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         <aside className="admin-doc-card p-4">

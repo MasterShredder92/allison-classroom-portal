@@ -113,8 +113,8 @@ export default function SchedulePage() {
         ) : schedule ? (
           <div className="space-y-6">
             {calendarEmbedUrl ? (
-              <div className="space-y-4 rounded-[1.5rem] border border-neutral-medium-gray/70 bg-white p-3 shadow-sm">
-                <div className="overflow-hidden rounded-[1.25rem] border border-neutral-medium-gray/50 bg-white">
+              <div className="paper-card space-y-4 rounded-[1.5rem] p-3">
+                <div className="overflow-hidden rounded-[1.25rem] border border-accent-sky-blue/30 bg-white">
                   <iframe
                     title="Classroom Google Calendar"
                     src={calendarEmbedUrl}
@@ -129,12 +129,12 @@ export default function SchedulePage() {
                 )}
               </div>
             ) : showImage && safeScheduleLink ? (
-              <div className="overflow-hidden rounded-[1.5rem] border border-neutral-medium-gray/70 bg-white p-3 shadow-sm">
+              <div className="paper-card overflow-hidden rounded-[1.5rem] p-3">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={safeScheduleLink} alt={schedule.title || 'Class schedule'} className="w-full rounded-[1.25rem]" />
               </div>
             ) : safeScheduleLink ? (
-              <div className="rounded-[1.5rem] border border-neutral-medium-gray/70 bg-white p-6 shadow-sm">
+              <div className="paper-card rounded-[1.5rem] p-6">
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-cyan">Schedule Link</p>
                 <a href={safeScheduleLink} target="_blank" rel="noreferrer" className="mt-3 inline-flex rounded-xl bg-accent-cyan px-5 py-3 font-black text-white hover:opacity-90">
                   Open Schedule / Calendar
@@ -143,7 +143,7 @@ export default function SchedulePage() {
             ) : null}
 
             {schedule.notes && (
-              <div className="rounded-[1.5rem] border border-neutral-medium-gray/70 bg-white p-6 shadow-sm">
+              <div className="paper-card rounded-[1.5rem] p-6">
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-cyan">Schedule Notes</p>
                 <p className="mt-3 whitespace-pre-line leading-7 text-neutral-dark-gray">{schedule.notes}</p>
               </div>

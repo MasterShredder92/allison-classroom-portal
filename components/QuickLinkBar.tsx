@@ -1,10 +1,10 @@
 import type { CSSProperties } from 'react'
 
 const quickLinks = [
-  { icon: '📚', title: 'Google Classroom', note: 'Daily classwork', url: 'https://classroom.google.com', color: 'from-accent-sky-blue/55 to-white', border: 'border-accent-sky-blue', rotate: '-1.3deg' },
-  { icon: '📊', title: 'Gradebook', note: 'Check progress', url: 'https://classroom.google.com', color: 'from-accent-yellow/60 to-white', border: 'border-accent-yellow', rotate: '1.1deg' },
-  { icon: '🎮', title: 'ClassDojo', note: 'Class updates', url: 'https://www.classdojo.com', color: 'from-accent-purple/40 to-white', border: 'border-accent-purple', rotate: '-0.8deg' },
-  { icon: '🏫', title: 'School Site', note: 'Wilmot resources', url: 'https://www.wilmot.k12.sd.us/', color: 'from-accent-lavender/50 to-white', border: 'border-accent-lavender', rotate: '1.4deg' },
+  { icon: '📚', title: 'Google Classroom', note: 'Daily classwork', url: 'https://classroom.google.com', color: 'from-accent-sky-blue/45 via-white/80 to-accent-light-pink/35', border: 'border-accent-sky-blue', rotate: '-1.3deg' },
+  { icon: '📊', title: 'Gradebook', note: 'Check progress', url: 'https://classroom.google.com', color: 'from-accent-light-pink/48 via-white/80 to-accent-sky-blue/30', border: 'border-accent-light-pink', rotate: '1.1deg' },
+  { icon: '🎮', title: 'ClassDojo', note: 'Class updates', url: 'https://www.classdojo.com', color: 'from-accent-sky-blue/38 via-white/80 to-accent-pink/24', border: 'border-accent-sky-blue', rotate: '-0.8deg' },
+  { icon: '🏫', title: 'School Site', note: 'Wilmot resources', url: 'https://www.wilmot.k12.sd.us/', color: 'from-accent-light-pink/42 via-white/80 to-accent-sky-blue/34', border: 'border-accent-light-pink', rotate: '1.4deg' },
 ]
 
 export default function QuickLinkBar() {
