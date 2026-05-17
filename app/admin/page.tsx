@@ -122,6 +122,22 @@ export default function AdminDashboard() {
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Link
+            href="/admin#post-update"
+            className="rounded-2xl border border-accent-yellow/45 bg-accent-yellow/20 p-4 transition hover:-translate-y-0.5 hover:bg-accent-yellow/30"
+          >
+            <p className="font-black text-neutral-text">Add Updates</p>
+            <p className="mt-1 text-sm font-semibold text-neutral-dark-gray">Post announcements, assignments, links, and photos from the quick posting box above.</p>
+          </Link>
+
+          <Link
+            href="/admin/pages"
+            className="rounded-2xl border border-accent-lavender/45 bg-accent-lavender/18 p-4 transition hover:-translate-y-0.5 hover:bg-accent-lavender/28"
+          >
+            <p className="font-black text-neutral-text">Edit Pages / Bio</p>
+            <p className="mt-1 text-sm font-semibold text-neutral-dark-gray">Open the Google Docs-style editor for About, Contact, custom pages, bold, italic, colors, links, and long text.</p>
+          </Link>
+
+          <Link
             href="/admin/logs"
             className="rounded-2xl border border-accent-cyan/35 bg-accent-cyan/12 p-4 transition hover:-translate-y-0.5 hover:bg-accent-cyan/20"
           >

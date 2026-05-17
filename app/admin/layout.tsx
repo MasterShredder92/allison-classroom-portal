@@ -124,6 +124,12 @@ export default function AdminLayout({
               Logs
             </Link>
             <Link
+              href="/admin/pages"
+              className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
+            >
+              Pages / Bio
+            </Link>
+            <Link
               href="/admin/schedule"
               className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
             >
@@ -161,6 +167,12 @@ export default function AdminLayout({
             className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
           >
             Logs
+          </Link>
+          <Link
+            href="/admin/pages"
+            className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
+          >
+            Pages / Bio
           </Link>
           <Link
             href="/admin/schedule"

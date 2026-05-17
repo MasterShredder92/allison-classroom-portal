@@ -276,7 +276,7 @@ export default function AdminQuickResourcePost({ compact = false }: { compact?: 
   const methodLabel = mode === 'upload' ? 'Upload file' : 'Import URL'
 
   return (
-    <section className={`admin-doc-card ${compact ? 'p-5' : 'p-5 sm:p-6'}`}>
+    <section id="post-update" className={`admin-doc-card ${compact ? 'p-5' : 'p-5 sm:p-6'}`}>
       <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="admin-kicker">Unified Post Tool</p>
