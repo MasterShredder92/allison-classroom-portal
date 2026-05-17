@@ -50,8 +50,8 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="bg-white p-8 rounded-lg border border-neutral-medium-gray">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-accent-cyan rounded-lg flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-serif font-bold text-2xl">A</span>
+            <div className="w-16 h-16 bg-accent-cyan rounded-lg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-cyan-200/60">
+              <span className="text-3xl" aria-hidden="true">🏫</span>
             </div>
             <h1 className="font-serif text-2xl font-bold text-neutral-text">
               Admin Login

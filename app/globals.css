@@ -1109,6 +1109,63 @@ main [contenteditable='true'] {
   box-shadow: 0 12px 26px rgba(65, 47, 25, 0.10), inset 0 1px 0 rgba(255,255,255,0.34) !important;
 }
 
+/* Contrast pass: deeper pastel blue panels so boxes do not melt into the page wash. */
+.page-hero,
+.paper-card,
+.bulletin-card,
+.empty-state,
+.quick-link-card,
+.resource-preview,
+.home-board {
+  border-color: rgba(58, 150, 176, 0.48) !important;
+  background:
+    radial-gradient(circle at 7% 12%, rgba(255, 190, 210, 0.56), transparent 12rem),
+    radial-gradient(circle at 88% 12%, rgba(68, 181, 211, 0.62), transparent 16rem),
+    radial-gradient(circle at 74% 92%, rgba(255, 137, 198, 0.22), transparent 14rem),
+    linear-gradient(135deg, rgba(255, 247, 251, 0.96), rgba(215, 241, 249, 0.95) 43%, rgba(186, 226, 239, 0.92)) !important;
+  box-shadow:
+    0 24px 62px rgba(24, 83, 100, 0.20),
+    0 8px 22px rgba(255, 137, 198, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.52) !important;
+}
+
+.page-hero,
+.home-polish .home-hero-gloss {
+  border-color: rgba(48, 135, 164, 0.52) !important;
+  background:
+    radial-gradient(circle at 9% 15%, rgba(255, 190, 210, 0.52), transparent 15rem),
+    radial-gradient(circle at 90% 14%, rgba(58, 174, 207, 0.68), transparent 18rem),
+    linear-gradient(135deg, rgba(255, 249, 252, 0.97), rgba(209, 239, 248, 0.96) 46%, rgba(179, 220, 235, 0.94)) !important;
+  box-shadow: 0 28px 74px rgba(24, 83, 100, 0.22), inset 0 1px 0 rgba(255,255,255,0.58) !important;
+}
+
+.empty-state {
+  border-style: dashed !important;
+  border-color: rgba(48, 135, 164, 0.56) !important;
+}
+
+.section-eyebrow {
+  border-color: rgba(48, 135, 164, 0.38) !important;
+  background: rgba(229, 247, 252, 0.88) !important;
+  box-shadow: 0 10px 24px rgba(24, 83, 100, 0.12) !important;
+}
+
+.resource-preview-bar {
+  border-bottom-color: rgba(48, 135, 164, 0.26) !important;
+  background: linear-gradient(90deg, rgba(255, 190, 210, 0.50), rgba(121, 204, 226, 0.48)) !important;
+}
+
+.classroom-shell .bg-white,
+.classroom-shell .bg-white\/70,
+.classroom-shell .bg-white\/72,
+.classroom-shell .bg-white\/75,
+.classroom-shell .bg-white\/76,
+.classroom-shell .bg-white\/80,
+.classroom-shell .bg-white\/86,
+.classroom-shell .bg-white\/96 {
+  background-color: rgba(229, 247, 252, 0.74) !important;
+}
+
 .page-hero,
 .paper-card,
 .bulletin-card,

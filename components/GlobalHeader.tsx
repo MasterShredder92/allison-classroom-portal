@@ -45,7 +45,8 @@ export default function GlobalHeader() {
           <div className="relative grid h-12 w-12 place-items-center rounded-[1.2rem] bg-accent-cyan shadow-lg shadow-cyan-200/70 transition-transform duration-200 group-hover:-rotate-3 group-hover:scale-105 sm:h-14 sm:w-14 sm:rounded-[1.35rem]">
             <span className="absolute -left-1 -top-1 h-5 w-5 rounded-full border-2 border-white bg-accent-yellow" />
             <span className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full border-2 border-white bg-accent-pink" />
-            <span className="font-serif text-3xl font-black leading-none text-white drop-shadow-sm">A</span>
+            <span className="text-3xl leading-none drop-shadow-sm" aria-hidden="true">🏫</span>
+            <span className="sr-only">Home</span>
           </div>
           <div className="hidden leading-tight sm:block">
             <p className="font-serif text-2xl font-black tracking-tight text-neutral-text">Allison&apos;s Classroom</p>

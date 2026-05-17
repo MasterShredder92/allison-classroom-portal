@@ -85,12 +85,18 @@ export default function AdminLayout({
       <aside className="bg-neutral-light-gray border-b md:border-r md:border-b-0 border-neutral-medium-gray md:w-64 md:min-h-screen">
         <div className="sticky top-0 p-6 md:p-4">
           <div className="flex items-center justify-between md:block">
-            <Link href="/admin" className="font-serif text-xl font-bold text-neutral-text">
-              Admin
-            </Link>
+            <div className="space-y-3">
+              <Link href="/admin" className="block font-serif text-xl font-bold text-neutral-text">
+                Admin
+              </Link>
+              <Link href="/" className="inline-flex items-center justify-center rounded-full border-2 border-accent-sky-blue/35 bg-accent-sky-blue/18 px-4 py-2 text-sm font-black text-neutral-text shadow-sm transition hover:-translate-y-0.5 hover:bg-accent-sky-blue/28">
+                🏫 Main Site
+              </Link>
+            </div>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden p-2 hover:bg-neutral-medium-gray rounded"
+              className="md:hidden rounded p-2 hover:bg-neutral-medium-gray"
+              aria-label="Toggle admin navigation"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {menuOpen ? (
