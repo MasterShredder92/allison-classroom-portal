@@ -118,34 +118,10 @@ export default function AdminLayout({
               Dashboard
             </Link>
             <Link
-              href="/admin/announcements"
-              className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
-            >
-              Announcements
-            </Link>
-            <Link
-              href="/admin/assignments"
-              className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
-            >
-              Assignments
-            </Link>
-            <Link
-              href="/admin/links"
-              className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
-            >
-              Links
-            </Link>
-            <Link
               href="/admin/schedule"
               className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
             >
               Schedule
-            </Link>
-            <Link
-              href="/admin/photos"
-              className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
-            >
-              Photos
             </Link>
             <Link
               href="/admin/edit-site"
@@ -175,34 +151,10 @@ export default function AdminLayout({
             Dashboard
           </Link>
           <Link
-            href="/admin/announcements"
-            className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
-          >
-            Announcements
-          </Link>
-          <Link
-            href="/admin/assignments"
-            className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
-          >
-            Assignments
-          </Link>
-          <Link
-            href="/admin/links"
-            className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
-          >
-            Links
-          </Link>
-          <Link
             href="/admin/schedule"
             className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
           >
             Schedule
-          </Link>
-          <Link
-            href="/admin/photos"
-            className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
-          >
-            Photos
           </Link>
           <Link
             href="/admin/edit-site"

@@ -12,12 +12,20 @@ type SourceType = 'Auto detect' | 'Google Doc' | 'Google Sheet' | 'Google Slide'
 type Mode = 'upload' | 'import'
 
 const sourceTypes: SourceType[] = ['Auto detect', 'Google Doc', 'Google Sheet', 'Google Slide', 'Google Form', 'Google Drive File', 'PDF', 'Image', 'Website', 'Video', 'Other']
+
 const targetLabels: Record<Target, string> = {
   announcements: 'Announcement',
   assignments: 'Assignment',
   links: 'Link Library',
-  photos: 'Photo Updates',
+  photos: 'Photo Update',
 }
+
+const targetOptions: Array<{ value: Target; label: string; icon: string; helper: string }> = [
+  { value: 'announcements', label: 'Announcements', icon: '📢', helper: 'News update' },
+  { value: 'assignments', label: 'Assignments', icon: '📚', helper: 'Class task' },
+  { value: 'links', label: 'Links', icon: '🔗', helper: 'Useful resource' },
+  { value: 'photos', label: 'Photos', icon: '📷', helper: 'Class moment' },
+]
 
 async function getApiError(response: Response, fallback: string) {
   try {
@@ -99,8 +107,8 @@ export default function AdminQuickResourcePost({ compact = false }: { compact?: 
   }, [])
 
   const helperText = useMemo(() => {
-    if (mode === 'upload') return 'Best move: drag a photo, PDF, Word doc, Sheet, or Slide here. Images auto-compress before upload.'
-    return 'Paste a Google Doc/Sheet/Slide/Drive/YouTube/website URL. Parents see an embedded preview when possible, not a blind Drive jump.'
+    if (mode === 'upload') return 'Drag in a photo, PDF, Word doc, Sheet, or Slide. Images auto-compress before upload.'
+    return 'Paste a Google Doc/Sheet/Slide/Drive/YouTube/website URL. Parents get the cleanest preview the portal can generate.'
   }, [mode])
 
   const resetForm = () => {
@@ -108,6 +116,7 @@ export default function AdminQuickResourcePost({ compact = false }: { compact?: 
     setUrl('')
     setNote('')
     setFile(null)
+    setSourceType('Auto detect')
     setDueDate(todayPlus(7))
   }
 
@@ -240,7 +249,7 @@ export default function AdminQuickResourcePost({ compact = false }: { compact?: 
     setMessage(null)
 
     try {
-      if (target === 'photos' && mode === 'import' && !sourceType.includes('Google') && sourceType !== 'Image') {
+      if (target === 'photos' && mode === 'import' && !sourceType.includes('Google') && sourceType !== 'Image' && sourceType !== 'Auto detect') {
         throw new Error('For Photo Updates, upload an image or paste a direct/Google image link.')
       }
       const resource = mode === 'upload' ? await uploadResource() : await importResource()
@@ -264,44 +273,67 @@ export default function AdminQuickResourcePost({ compact = false }: { compact?: 
     setMode('upload')
   }
 
+  const methodLabel = mode === 'upload' ? 'Upload file' : 'Import URL'
+
   return (
-    <section className={`admin-doc-card ${compact ? 'p-5' : 'p-6'}`}>
+    <section className={`admin-doc-card ${compact ? 'p-5' : 'p-5 sm:p-6'}`}>
       <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="admin-kicker">Quick Resource Post</p>
-          <h2 className="admin-section-title">Upload or import once. Post anywhere.</h2>
-          <p className="admin-muted">Files are saved as durable classroom resources. Public posts can be hidden without deleting the saved library copy.</p>
+          <p className="admin-kicker">Unified Post Tool</p>
+          <h2 className="admin-section-title">Post once from the dashboard.</h2>
+          <p className="admin-muted">Pick the content type, add the parent-facing details, then upload or import the resource. No duplicate section pages.</p>
         </div>
       </div>
 
       {error && <div role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800">{error}</div>}
       {message && <div role="status" className="mb-4 rounded-xl border border-accent-sky-blue/35 bg-accent-sky-blue/15 px-4 py-3 text-sm font-semibold text-accent-cyan">{message}</div>}
 
-      <form onSubmit={handleSubmit} className="space-y-4" dir="ltr">
-        <div className="grid gap-4 lg:grid-cols-3">
-          <label className="admin-field">
-            <span>Where should it post?</span>
-            <select value={target} onChange={event => setTarget(event.target.value as Target)} className="admin-input">
-              <option value="announcements">Announcements</option>
-              <option value="assignments">Assignments</option>
-              <option value="links">Links</option>
-              <option value="photos">Photo Updates</option>
-            </select>
-          </label>
+      <form onSubmit={handleSubmit} className="space-y-5" dir="ltr">
+        <fieldset className="space-y-3">
+          <legend className="admin-field-label">Content type</legend>
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            {targetOptions.map(option => {
+              const active = target === option.value
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  data-target={option.value}
+                  aria-pressed={active}
+                  onClick={() => setTarget(option.value)}
+                  className={`admin-toggle-chip ${active ? 'active' : ''}`}
+                >
+                  <span className="text-2xl" aria-hidden="true">{option.icon}</span>
+                  <span className="font-black">{option.label}</span>
+                  <span className="text-[0.72rem] font-bold opacity-75">{option.helper}</span>
+                </button>
+              )
+            })}
+          </div>
+        </fieldset>
 
-          <label className="admin-field">
-            <span>How is it coming in?</span>
-            <select value={mode} onChange={event => setMode(event.target.value as Mode)} className="admin-input">
-              <option value="upload">Drag/drop upload</option>
-              <option value="import">Paste URL/import</option>
-            </select>
-          </label>
+        <label className="admin-field">
+          <span>Title</span>
+          <input value={title} onChange={event => setTitle(event.target.value)} className="admin-input" placeholder="Weekly reading slides" required dir="ltr" />
+        </label>
 
-          <label className="admin-field">
-            <span>Title parents/students see</span>
-            <input value={title} onChange={event => setTitle(event.target.value)} className="admin-input" placeholder="Weekly reading slides" required dir="ltr" />
-          </label>
-        </div>
+        <label className="admin-field">
+          <span>Notes</span>
+          <textarea value={note} onChange={event => setNote(event.target.value)} className="admin-textarea min-h-24" placeholder="Tell students or parents what to do with this." dir="ltr" />
+        </label>
+
+        <fieldset className="space-y-3">
+          <legend className="admin-field-label">Method</legend>
+          <div className="grid grid-cols-2 gap-3 rounded-2xl bg-accent-sky-blue/10 p-2">
+            <button type="button" onClick={() => setMode('upload')} className={`admin-method-toggle ${mode === 'upload' ? 'active' : ''}`} aria-pressed={mode === 'upload'}>
+              Upload file
+            </button>
+            <button type="button" onClick={() => setMode('import')} className={`admin-method-toggle ${mode === 'import' ? 'active' : ''}`} aria-pressed={mode === 'import'}>
+              Import URL
+            </button>
+          </div>
+          <p className="text-sm font-semibold text-neutral-dark-gray">{helperText}</p>
+        </fieldset>
 
         {mode === 'upload' ? (
           <div
@@ -311,10 +343,11 @@ export default function AdminQuickResourcePost({ compact = false }: { compact?: 
             onDrop={(event) => { event.preventDefault(); setDragging(false); handleFiles(event.dataTransfer.files) }}
           >
             <input ref={fileInputRef} type="file" className="sr-only" onChange={event => handleFiles(event.target.files)} accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" />
-            <div>
-              <p className="text-lg font-black text-neutral-dark-gray">Drop a file here</p>
-              <p className="text-sm font-semibold text-neutral-medium-gray">Images auto-compress for web. PDFs, Word, Sheets, and Slides save to the classroom resource library.</p>
-              {file && <p className="mt-2 text-sm font-black text-accent-purple">Selected: {file.name}</p>}
+            <div className="flex flex-col gap-1">
+              <p className="text-3xl" aria-hidden="true">⬆️</p>
+              <p className="text-xl font-black text-neutral-text">Drop a file here</p>
+              <p className="text-sm font-bold text-neutral-dark-gray">Photos, PDFs, Word docs, Sheets, and Slides are saved to the classroom resource library.</p>
+              {file && <p className="mt-2 rounded-full bg-white/80 px-3 py-2 text-sm font-black text-accent-purple shadow-sm">Selected: {file.name}</p>}
             </div>
             <button type="button" onClick={() => fileInputRef.current?.click()} className="admin-secondary-button">Choose file</button>
           </div>
@@ -332,11 +365,6 @@ export default function AdminQuickResourcePost({ compact = false }: { compact?: 
             </label>
           </div>
         )}
-
-        <label className="admin-field">
-          <span>Short note</span>
-          <textarea value={note} onChange={event => setNote(event.target.value)} className="admin-textarea min-h-24" placeholder="Optional: tell students or parents what to do with this." dir="ltr" />
-        </label>
 
         {target === 'assignments' && (
           <div className="grid gap-4 md:grid-cols-2">
@@ -367,10 +395,13 @@ export default function AdminQuickResourcePost({ compact = false }: { compact?: 
           </label>
         )}
 
-        <div className="flex flex-col gap-3 rounded-2xl bg-neutral-off-white p-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm font-semibold text-neutral-dark-gray">{helperText}</p>
-          <button type="submit" disabled={saving} className="rounded-xl bg-accent-cyan px-5 py-3 text-sm font-black text-white shadow-sm hover:opacity-90 disabled:opacity-60">
-            {saving ? 'Saving...' : `Save + Post to ${targetLabels[target]}`}
+        <div className="flex flex-col gap-3 rounded-3xl border border-accent-sky-blue/25 bg-accent-sky-blue/10 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm font-black text-neutral-text">Ready to post to {targetLabels[target]} by {methodLabel}.</p>
+            <p className="text-xs font-semibold text-neutral-dark-gray">This creates the public post and saves the reusable resource record.</p>
+          </div>
+          <button type="submit" disabled={saving} className="admin-primary-button">
+            {saving ? 'Saving...' : 'Save + Post'}
           </button>
         </div>
       </form>

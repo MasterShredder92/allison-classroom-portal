@@ -11,6 +11,18 @@ interface DashboardStats {
   links: number
 }
 
+const statCards: Array<{
+  key: keyof DashboardStats
+  label: string
+  tone: string
+  icon: string
+}> = [
+  { key: 'announcements', label: 'Announcements', tone: 'text-accent-pink', icon: '📢' },
+  { key: 'assignments', label: 'Assignments', tone: 'text-accent-cyan', icon: '📚' },
+  { key: 'links', label: 'Links', tone: 'text-accent-sky-blue', icon: '🔗' },
+  { key: 'photoUpdates', label: 'Photos', tone: 'text-accent-lavender', icon: '📷' },
+]
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
@@ -68,110 +80,61 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="font-serif text-4xl font-bold text-neutral-text mb-8">Dashboard</h1>
+      <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="admin-kicker">Admin Home</p>
+          <h1 className="font-serif text-3xl font-bold text-neutral-text sm:text-4xl">Dashboard</h1>
+        </div>
+        <Link href="/admin/edit-site" className="admin-secondary-button w-full sm:w-auto">
+          Edit Site
+        </Link>
+      </div>
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-32 bg-neutral-light-gray rounded-lg animate-pulse" />
+            <div key={i} className="h-28 animate-pulse rounded-2xl bg-accent-sky-blue/12" />
           ))}
         </div>
       ) : stats ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-          <div className="bg-white p-6 rounded-lg border border-neutral-medium-gray">
-            <p className="text-neutral-dark-gray text-sm font-semibold uppercase tracking-wide mb-2">
-              Announcements
-            </p>
-            <p className="font-serif text-4xl font-bold text-accent-pink">{stats.announcements}</p>
-            <Link
-              href="/admin/announcements"
-              className="text-accent-cyan text-sm hover:underline mt-4 inline-block"
-            >
-              Manage →
-            </Link>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg border border-neutral-medium-gray">
-            <p className="text-neutral-dark-gray text-sm font-semibold uppercase tracking-wide mb-2">
-              Assignments
-            </p>
-            <p className="font-serif text-4xl font-bold text-accent-cyan">{stats.assignments}</p>
-            <Link
-              href="/admin/assignments"
-              className="text-accent-cyan text-sm hover:underline mt-4 inline-block"
-            >
-              Manage →
-            </Link>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg border border-neutral-medium-gray">
-            <p className="text-neutral-dark-gray text-sm font-semibold uppercase tracking-wide mb-2">
-              Photo Updates
-            </p>
-            <p className="font-serif text-4xl font-bold text-accent-lavender">{stats.photoUpdates}</p>
-            <Link
-              href="/admin/photos"
-              className="text-accent-cyan text-sm hover:underline mt-4 inline-block"
-            >
-              Manage →
-            </Link>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg border border-neutral-medium-gray">
-            <p className="text-neutral-dark-gray text-sm font-semibold uppercase tracking-wide mb-2">
-              Links
-            </p>
-            <p className="font-serif text-4xl font-bold text-accent-sky-blue">{stats.links}</p>
-            <Link href="/admin/links" className="text-accent-cyan text-sm hover:underline mt-4 inline-block">
-              Manage →
-            </Link>
-          </div>
+        <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {statCards.map(card => (
+            <div key={card.key} className="admin-stat-card">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-[0.68rem] font-black uppercase tracking-wide text-neutral-dark-gray sm:text-xs">
+                  {card.label}
+                </p>
+                <span className="text-lg" aria-hidden="true">{card.icon}</span>
+              </div>
+              <p className={`font-serif text-3xl font-black sm:text-4xl ${card.tone}`}>{stats[card.key]}</p>
+            </div>
+          ))}
         </div>
       ) : null}
 
       <AdminQuickResourcePost />
 
-      <div className="admin-doc-card mt-8 p-6">
-        <h2 className="font-serif text-2xl font-semibold text-neutral-text mb-6">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Link
-            href="/admin/announcements"
-            className="bg-neutral-light-gray p-4 rounded-lg hover:bg-neutral-medium-gray transition-colors"
-          >
-            <p className="font-semibold text-neutral-text mb-1">New Announcement</p>
-            <p className="text-neutral-dark-gray text-sm">Post a news update</p>
-          </Link>
-
-          <Link
-            href="/admin/assignments"
-            className="bg-neutral-light-gray p-4 rounded-lg hover:bg-neutral-medium-gray transition-colors"
-          >
-            <p className="font-semibold text-neutral-text mb-1">New Assignment</p>
-            <p className="text-neutral-dark-gray text-sm">Add a class assignment</p>
-          </Link>
-
-          <Link
-            href="/admin/photos"
-            className="bg-neutral-light-gray p-4 rounded-lg hover:bg-neutral-medium-gray transition-colors"
-          >
-            <p className="font-semibold text-neutral-text mb-1">Photo Update</p>
-            <p className="text-neutral-dark-gray text-sm">Share classroom photos</p>
-          </Link>
-
+      <div className="admin-doc-card mt-8 p-5 sm:p-6">
+        <div className="mb-4">
+          <p className="admin-kicker">Admin Tools</p>
+          <h2 className="admin-section-title">Site-level edits</h2>
+          <p className="admin-muted">Content posting now happens above. These buttons are only for workflows that are not regular posts.</p>
+        </div>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Link
             href="/admin/schedule"
-            className="bg-neutral-light-gray p-4 rounded-lg hover:bg-neutral-medium-gray transition-colors"
+            className="rounded-2xl border border-accent-sky-blue/35 bg-accent-sky-blue/12 p-4 transition hover:-translate-y-0.5 hover:bg-accent-sky-blue/20"
           >
-            <p className="font-semibold text-neutral-text mb-1">Update Schedule</p>
-            <p className="text-neutral-dark-gray text-sm">Paste a Google Calendar link or schedule image</p>
+            <p className="font-black text-neutral-text">Update Schedule</p>
+            <p className="mt-1 text-sm font-semibold text-neutral-dark-gray">Change the public class schedule image, link, or notes.</p>
           </Link>
 
           <Link
             href="/admin/edit-site"
-            className="bg-accent-cyan/10 p-4 rounded-lg hover:bg-accent-cyan/20 transition-colors border border-accent-cyan/30"
+            className="rounded-2xl border border-accent-pink/35 bg-accent-pink/12 p-4 transition hover:-translate-y-0.5 hover:bg-accent-pink/20"
           >
-            <p className="font-semibold text-neutral-text mb-1">Edit Site</p>
-            <p className="text-neutral-dark-gray text-sm">Edit homepage text and button links without code</p>
+            <p className="font-black text-neutral-text">Edit Site</p>
+            <p className="mt-1 text-sm font-semibold text-neutral-dark-gray">Edit homepage text and button links without code.</p>
           </Link>
         </div>
       </div>
