@@ -2,9 +2,26 @@
 
 import { useEffect, useState } from 'react'
 
+const WOLF_MESSAGES = [
+  'Woof! Have a great school day!',
+  'Thanks for checking in!',
+  'You are doing great, families!',
+  'Homework hero mode!',
+  'Keep learning fun!',
+  'Classroom updates are right here!',
+  'Go Wolves!',
+  'Reading time is the best time!',
+  'Small steps, big progress!',
+  'Thanks for supporting your student!',
+  'A+ parent teamwork!',
+  'See what is new today!'
+]
+
 export default function AnimatedWolfMascot() {
   const [progress, setProgress] = useState(0)
   const [reducedMotion, setReducedMotion] = useState(false)
+  const [messageIndex, setMessageIndex] = useState(0)
+  const [tapCount, setTapCount] = useState(0)
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -37,19 +54,28 @@ export default function AnimatedWolfMascot() {
   const hop = reducedMotion ? 0 : Math.sin(progress * Math.PI * 5) * 16
   const drift = reducedMotion ? 0 : Math.sin(progress * Math.PI * 2) * 22
   const rotate = reducedMotion ? -3 : Math.sin(progress * Math.PI * 4) * 8 - 3
-  const tailWag = reducedMotion ? 0 : Math.sin(progress * Math.PI * 10) * 10
-  const pawWave = reducedMotion ? -8 : Math.sin(progress * Math.PI * 8) * 12 - 8
+  const tailWag = reducedMotion ? 0 : Math.sin(progress * Math.PI * 10 + tapCount) * 10
+  const pawWave = reducedMotion ? -8 : Math.sin(progress * Math.PI * 8 + tapCount) * 12 - 8
+  const tapBounce = reducedMotion ? 0 : tapCount % 2 === 0 ? 0 : -5
+  const currentMessage = WOLF_MESSAGES[messageIndex]
+
+  const handleMascotTap = () => {
+    setMessageIndex((current) => (current + 1) % WOLF_MESSAGES.length)
+    setTapCount((current) => current + 1)
+  }
 
   return (
-    <div
+    <button
+      type="button"
       className="wolf-mascot"
-      aria-hidden="true"
+      aria-label={`Classroom wolf says: ${currentMessage}. Tap for another message.`}
+      onClick={handleMascotTap}
       style={{
-        transform: `translate3d(${drift}px, ${-hop}px, 0) rotate(${rotate}deg)`,
+        transform: `translate3d(${drift}px, ${-hop + tapBounce}px, 0) rotate(${rotate}deg)`,
       }}
     >
-      <div className="wolf-mascot__bubble">Keep going!</div>
-      <svg className="wolf-mascot__svg" viewBox="0 0 190 190" role="img">
+      <span className="wolf-mascot__bubble" aria-live="polite">{currentMessage}</span>
+      <svg className="wolf-mascot__svg" viewBox="0 0 190 190" role="img" aria-label="Friendly classroom wolf mascot">
         <defs>
           <linearGradient id="wolf-fur" x1="0" x2="1" y1="0" y2="1">
             <stop offset="0%" stopColor="#8d96a8" />
@@ -104,6 +130,6 @@ export default function AnimatedWolfMascot() {
           />
         </g>
       </svg>
-    </div>
+    </button>
   )
 }

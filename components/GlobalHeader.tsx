@@ -42,17 +42,23 @@ export default function GlobalHeader() {
     <header className="sticky top-0 z-50 border-b-2 border-neutral-medium-gray/60 bg-white/72 shadow-[0_14px_34px_rgba(65,47,25,0.10)] backdrop-blur-2xl">
       <nav className="classroom-shell flex min-h-16 items-center justify-between gap-3 py-2.5 sm:min-h-20 sm:gap-4 sm:py-3">
         <Link href="/" className="focus-ring group flex items-center gap-3 rounded-[1.35rem]">
-          <div className="relative grid h-12 w-12 place-items-center rounded-[1.2rem] bg-accent-cyan shadow-lg shadow-cyan-200/70 transition-transform duration-200 group-hover:-rotate-3 group-hover:scale-105 sm:h-14 sm:w-14 sm:rounded-[1.35rem]">
-            <span className="absolute -left-1 -top-1 h-5 w-5 rounded-full border-2 border-white bg-accent-yellow" />
-            <span className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full border-2 border-white bg-accent-pink" />
-            <span className="text-3xl leading-none drop-shadow-sm" aria-hidden="true">🏫</span>
+          <div className="relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-[1.2rem] border-2 border-white bg-white shadow-lg shadow-cyan-200/70 transition-transform duration-200 group-hover:-rotate-3 group-hover:scale-105 sm:h-14 sm:w-14 sm:rounded-[1.35rem]">
+            <img src="/wilmot-wolves-logo.png" alt="Wilmot School District Wolves logo" className="h-full w-full object-contain p-1" />
             <span className="sr-only">Home</span>
           </div>
           <div className="hidden leading-tight sm:block">
             <p className="font-serif text-2xl font-black tracking-tight text-neutral-text">Allison&apos;s Classroom</p>
-            <p className="text-[0.66rem] font-black uppercase tracking-[0.20em] text-neutral-dark-gray">Wilmot 5th &amp; 6th Grade</p>
+            <p className="text-[0.66rem] font-black uppercase tracking-[0.20em] text-neutral-dark-gray">Wilmot Wolves • 5th &amp; 6th Grade</p>
           </div>
         </Link>
+
+        <div className="hidden xl:flex items-center gap-2 rounded-full border-2 border-accent-sky-blue/25 bg-white/72 px-3 py-2 shadow-sm">
+          <img src="/wilmot-wolves-logo.png" alt="" aria-hidden="true" className="h-8 w-8 rounded-full object-contain" />
+          <div className="leading-tight">
+            <p className="text-[0.58rem] font-black uppercase tracking-[0.18em] text-accent-cyan">Wilmot Proud</p>
+            <p className="text-xs font-black text-neutral-text">Official classroom hub</p>
+          </div>
+        </div>
 
         <div className="hidden items-center gap-1 rounded-full border-2 border-accent-sky-blue/25 bg-gradient-to-r from-accent-sky-blue/12 via-white/78 to-accent-light-pink/20 p-1.5 shadow-sm lg:flex">
           <Link href="/about" className="rounded-full px-4 py-2 text-sm font-black text-neutral-dark-gray transition-all hover:-translate-y-0.5 hover:bg-accent-light-pink/50 hover:text-neutral-text">About</Link>
