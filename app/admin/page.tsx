@@ -167,11 +167,11 @@ export default function AdminDashboard() {
           </Link>
 
           <Link
-            href="/admin/pages"
+            href="/admin/edit-site"
             className="bg-accent-cyan/10 p-4 rounded-lg hover:bg-accent-cyan/20 transition-colors border border-accent-cyan/30"
           >
             <p className="font-semibold text-neutral-text mb-1">Edit Site</p>
-            <p className="text-neutral-dark-gray text-sm">Add pages and edit text without code</p>
+            <p className="text-neutral-dark-gray text-sm">Edit homepage text and button links without code</p>
           </Link>
         </div>
       </div>

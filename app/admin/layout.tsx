@@ -148,7 +148,7 @@ export default function AdminLayout({
               Photos
             </Link>
             <Link
-              href="/admin/pages"
+              href="/admin/edit-site"
               className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
             >
               Edit Site
@@ -205,7 +205,7 @@ export default function AdminLayout({
             Photos
           </Link>
           <Link
-            href="/admin/pages"
+            href="/admin/edit-site"
             className="block py-2 px-4 rounded text-neutral-text hover:bg-neutral-medium-gray transition-colors"
           >
             Edit Site

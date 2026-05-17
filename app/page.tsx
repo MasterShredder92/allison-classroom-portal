@@ -5,6 +5,7 @@ import Link from 'next/link'
 import AnnouncementCard from '@/components/AnnouncementCard'
 import AssignmentCard from '@/components/AssignmentCard'
 import QuickLinkBar from '@/components/QuickLinkBar'
+import { getDefaultSiteSettings, type SiteSettingsMap } from '@/lib/site-settings'
 
 interface Announcement {
   id: string
@@ -52,14 +53,16 @@ export default function Home() {
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [classes, setClasses] = useState<Class[]>([])
   const [loading, setLoading] = useState(true)
+  const [siteSettings, setSiteSettings] = useState<SiteSettingsMap>(() => getDefaultSiteSettings())
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [announcementsRes, assignmentsRes, classesRes] = await Promise.all([
+        const [announcementsRes, assignmentsRes, classesRes, settingsRes] = await Promise.all([
           fetch('/api/announcements'),
           fetch('/api/assignments'),
           fetch('/api/classes'),
+          fetch('/api/site-settings'),
         ])
         if (announcementsRes.ok) {
           const data = await announcementsRes.json()
@@ -72,6 +75,16 @@ export default function Home() {
         if (classesRes.ok) {
           const data = await classesRes.json()
           setClasses(data.data)
+        }
+        if (settingsRes.ok) {
+          const data = await settingsRes.json()
+          const nextSettings = { ...getDefaultSiteSettings() }
+          for (const setting of data.data || []) {
+            if (setting?.key && typeof setting.value === 'string' && setting.key in nextSettings) {
+              nextSettings[setting.key as keyof SiteSettingsMap] = setting.value
+            }
+          }
+          setSiteSettings(nextSettings)
         }
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -92,16 +105,16 @@ export default function Home() {
 
         <div className="relative z-10 grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
           <div className="reveal-up">
-            <span className="section-eyebrow">Parent Resource Hub</span>
+            <span className="section-eyebrow">{siteSettings.home_eyebrow}</span>
             <h1 className="mt-5 max-w-3xl font-serif text-[clamp(2.75rem,12vw,4.5rem)] font-black leading-[0.92] tracking-tight text-neutral-text lg:text-7xl">
-              Welcome to Allison&apos;s Classroom.
+              {siteSettings.home_headline}
             </h1>
             <p className="mt-5 max-w-2xl text-base font-bold leading-7 text-neutral-dark-gray sm:text-xl sm:leading-8">
-              One warm, organized place for announcements, assignments, schedules, links, and classroom moments for Allison&apos;s 5th and 6th grade families.
+              {siteSettings.home_subheadline}
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Link href="/news" className="fun-button rounded-full bg-accent-cyan px-7 py-3.5 text-center font-black text-white shadow-xl shadow-cyan-200">See Latest News</Link>
-              <Link href="/links" className="fun-button rounded-full border-2 border-neutral-medium-gray bg-white px-7 py-3.5 text-center font-black text-neutral-text shadow-sm hover:border-accent-pink">Open Parent Links</Link>
+              <Link href={siteSettings.home_primary_cta_href} className="fun-button rounded-full bg-accent-cyan px-7 py-3.5 text-center font-black text-white shadow-xl shadow-cyan-200">{siteSettings.home_primary_cta_label}</Link>
+              <Link href={siteSettings.home_secondary_cta_href} className="fun-button rounded-full border-2 border-neutral-medium-gray bg-white px-7 py-3.5 text-center font-black text-neutral-text shadow-sm hover:border-accent-pink">{siteSettings.home_secondary_cta_label}</Link>
             </div>
             <div className="home-mini-stats mt-7 grid max-w-2xl grid-cols-3 gap-3">
               {['News', 'Work', 'Moments'].map((item, index) => (
@@ -116,8 +129,8 @@ export default function Home() {
           <div className="chalkboard home-board floaty-slow min-h-[420px] rounded-[2.2rem] p-5 text-white" style={{ '--rotate': '1deg' } as CSSProperties}>
             <div className="relative z-10 flex h-full flex-col rounded-[1.45rem] border-2 border-white/12 p-6">
               <div className="mb-5 flex items-center justify-between gap-4">
-                <p className="font-serif text-4xl font-black">Today in class</p>
-                <span className="rounded-full bg-white/12 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-white/85">live board</span>
+                <p className="font-serif text-4xl font-black">{siteSettings.home_board_title}</p>
+                <span className="rounded-full bg-white/12 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-white/85">{siteSettings.home_board_badge}</span>
               </div>
               <div className="grid flex-1 gap-4">
                 <Link href="/news" className="drag-hint pop-card rounded-[1.4rem] bg-white/96 p-5 text-neutral-text shadow-lg" style={{ '--tilt': '-1.4deg', transform: 'rotate(-1.4deg)' } as CSSProperties}>
@@ -143,7 +156,7 @@ export default function Home() {
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>
             <span className="section-eyebrow home-black-label">Quick Access</span>
-            <h2 className="home-black-label mt-3 font-serif text-4xl font-black text-neutral-text">Family shortcuts</h2>
+            <h2 className="home-black-label mt-3 font-serif text-4xl font-black text-neutral-text">{siteSettings.quick_access_heading}</h2>
           </div>
         </div>
         <QuickLinkBar />
@@ -178,9 +191,9 @@ export default function Home() {
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <span className="section-eyebrow home-black-label">Classrooms</span>
-            <h2 className="home-black-label mt-3 font-serif text-5xl font-black leading-none text-neutral-text">Choose a class</h2>
+            <h2 className="home-black-label mt-3 font-serif text-5xl font-black leading-none text-neutral-text">{siteSettings.classes_heading}</h2>
           </div>
-          <p className="max-w-xl text-sm font-bold leading-6 text-neutral-dark-gray">Each class page keeps families focused on the assignments and resources that match the student’s schedule.</p>
+          <p className="max-w-xl text-sm font-bold leading-6 text-neutral-dark-gray">{siteSettings.classes_description}</p>
         </div>
         {loading ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">{[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="h-36 animate-pulse rounded-[1.6rem] bg-white/75" />)}</div>
